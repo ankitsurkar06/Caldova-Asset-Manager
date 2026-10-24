@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Environments", "Environments\Environments.deployproj", "{6EC62416-FEE0-4D9C-A150-3C789F1A07BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartsUnlimitedWebsite", "PartsUnlimitedWebsite\PartsUnlimitedWebsite.csproj", "{68411661-4B0C-444A-BC13-2182FBB116B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caldova-Asset-Manager", "PartsUnlimitedWebsite\Caldova-Asset-Manager.csproj", "{68411661-4B0C-444A-BC13-2182FBB116B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -48,10 +48,10 @@ $env:Path += ";C:\Program Files\Git\cmd"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #Restore NuGet packages
-& "C:\Source\AppWorkshop\IaaS2PaaSWeb\nuget.exe" restore C:\Source\AppWorkshop\IaaS2PaaSWeb\IaaS2PaaSWeb.sln
+& "C:\Source\AppWorkshop\IaaS2PaaSWeb\nuget.exe" restore C:\Source\AppWorkshop\IaaS2PaaSWeb\Caldova-Asset-Manager.sln
 
 #Build App using VS Tools
-msbuild C:\Source\AppWorkshop\IaaS2PaaSWeb\PartsUnlimitedWebsite\partsunlimitedwebsite.csproj /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:VisualStudioVersion=15.0
+msbuild C:\Source\AppWorkshop\IaaS2PaaSWeb\PartsUnlimitedWebsite\Caldova-Asset-Manager.csproj /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:VisualStudioVersion=15.0
 
 ## Deploy Webapp
 

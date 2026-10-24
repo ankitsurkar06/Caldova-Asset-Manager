@@ -228,7 +228,7 @@ Now that the environment is set up, we need to make sure we can connect to the d
 
     ![Visual Studio Sing In](./media/image12-vs-sign-in.png)
 
-5. Open the Solution which is located at **C:\\Source\\AppWorkshop\\IaaS2PaaSWeb\\IaaS2PaaSWeb.sln**
+5. Open the Solution which is located at **C:\\Source\\AppWorkshop\\IaaS2PaaSWeb\\Caldova-Asset-Manager.sln**
 
 Write the values defined during the setup:
 

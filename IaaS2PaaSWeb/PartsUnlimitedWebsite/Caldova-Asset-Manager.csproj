@@ -13,7 +13,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PartsUnlimited</RootNamespace>
-    <AssemblyName>PartsUnlimited</AssemblyName>
+    <AssemblyName>Caldova-Asset-Manager</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
