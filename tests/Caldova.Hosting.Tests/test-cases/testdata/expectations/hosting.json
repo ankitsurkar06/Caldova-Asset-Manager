@@ -1,0 +1,16 @@
+{
+  "origin": "https://store.example.test",
+  "health": { "status": "running" },
+  "assetPath": "/Content/bootstrap.min.css",
+  "assetSha256": "5A3D8C05785485D36EE5C94D4681E5B1D9E4B94C5BE8B5BD7B0F3168FFF1BD9A",
+  "problemTitle": "The request could not be completed. See server logs for details.",
+  "sessionCookie": ".AspNetCore.Session",
+  "identityCookie": ".AspNetCore.Identity.Application",
+  "ordersMarker": "Order History",
+  "cartMarker": "Shopping Cart",
+  "loginFailure": "Invalid login attempt.",
+  "sqlConfigurationError": "Configure ConnectionStrings:DefaultConnectionString",
+  "keyConfigurationError": "Configure DataProtection:KeyPath",
+  "homeConfigurationError": "Azure App Service requires HOME",
+  "relativeKeyError": "DataProtection:KeyPath must be an absolute path"
+}

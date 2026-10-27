@@ -1,0 +1,8 @@
+{
+  "id": "hosting-test-user",
+  "email": "hosting-user@example.test",
+  "name": "Hosting Test User",
+  "password": "Hosting-tests-only!42",
+  "securityStamp": "hosting-test-stamp",
+  "wrongPassword": "Wrong-hosting-password!42"
+}

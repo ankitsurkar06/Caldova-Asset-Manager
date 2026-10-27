@@ -1,0 +1,10 @@
+{
+  "ConnectionStrings:DefaultConnectionString": "Server=localhost;Database=CaldovaHostingTests;Integrated Security=true;Encrypt=true;Connect Timeout=1",
+  "AllowedHosts": "store.example.test",
+  "https_port": "443",
+  "ShowRecommendations": "false",
+  "Authentication:Facebook:Enabled": "false",
+  "Authentication:Google:Enabled": "false",
+  "Authentication:Microsoft:Enabled": "false",
+  "Authentication:Twitter:Enabled": "false"
+}
