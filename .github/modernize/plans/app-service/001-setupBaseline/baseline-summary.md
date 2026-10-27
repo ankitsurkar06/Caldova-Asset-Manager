@@ -38,3 +38,15 @@ resource identifiers are needed.
 Required fields, fixture paths and unique IDs were checked before freezing.
 Freeze integrity is anchored by the baseline-only Git commit and checked again
 before post-migration execution.
+
+## Re-freeze 1
+
+The first execution passed 14 cases and identified two specification defects.
+TC-WEB-014 expected a transport-level 400 for an existing SignalR protocol error;
+direct execution of the published artifact confirmed HTTP 200 with
+`The client requested a non-integer protocol version.` in the JSON error field.
+TC-WEB-015 confused the `Results.Problem` detail argument with its title.
+The existing production handler and SignalR implementation were not changed.
+Both expectations were corrected and strengthened to assert their exact JSON
+fields. The required-field, fixture and unique-ID freeze gate was repeated.
+The resulting baseline-only commit supersedes the original expectations.

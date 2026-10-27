@@ -185,7 +185,7 @@ are generated per case. No test invokes a real remote integration.
 - Entry Point: POST /signalr/negotiate
 - Trigger: HTTPS POST with negotiateVersion=1; then with negotiateVersion=invalid.
 - Preconditions: C; Production; absolute temporary key path.
-- Expected Response: Valid request 200; negotiateVersion=1, nonempty connectionId and connectionToken, WebSockets offered; invalid request 400.
+- Expected Response: Valid request 200; negotiateVersion=1, nonempty connectionId and connectionToken, WebSockets offered; invalid request 200 with a single error field exactly E.negotiateError.
 - Resource Verification: No SQL connection opened.
 - Negative Verification: Invalid negotiation must not allocate a usable connection.
 - Data References: C, E.
@@ -196,7 +196,7 @@ are generated per case. No test invokes a real remote integration.
 - Entry Point: GET /api/products
 - Trigger: HTTPS request with SQL opening intercepted to throw a sentinel InvalidOperationException.
 - Preconditions: C; Production; absolute temporary key path; interceptor blocks before network IO.
-- Expected Response: 500 application/problem+json; status=500, title=E.problemTitle.
+- Expected Response: 500 application/problem+json; status=500, title=E.problemTitle and detail=E.problemDetail.
 - Resource Verification: Exactly one attempted connection is intercepted.
 - Negative Verification: Body contains neither the sentinel exception nor the SQL setting; no network IO or database writes.
 - Data References: C, E.
@@ -220,3 +220,15 @@ Cases cover successful, empty/boundary, untrusted-input and failure paths for
 hosting-impacted boundaries. Whole-application business-flow coverage is not
 claimed: real checkout, SQL compatibility, external providers and Azure/IIS
 termination are release gates, not mocked hosting assertions.
+
+## Re-freeze 1
+
+The initial test run exposed two spec defects. SignalR's unchanged framework
+negotiation protocol responds HTTP 200 with a JSON error for a non-integer
+version; a local execution of the published app confirmed the exact error.
+The unchanged production handler calls `Results.Problem` with its first
+positional argument, which is detail, not title. The default framework title
+and custom detail are now both asserted. These corrections preserve existing
+contracts and do not weaken production error sanitization or accept a new
+application regression. All required fields and fixture paths were revalidated
+before re-freezing; the case inventory and dependency decisions are unchanged.
