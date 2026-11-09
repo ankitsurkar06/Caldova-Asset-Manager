@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "edition": "modernize-offline",
+  "skillId": "oracle-to-postgresql-app-assessment",
+  "category": "assessment",
+  "language": null,
+  "sourceVersion": "2.8.5",
+  "lineEndings": "lf",
+  "integrationRevision": "pr799051-review-2",
+  "files": [
+    {
+      "path": "references/host-contract.md",
+      "sha256": "fec46e3c2c42528ed012d75c04cf933e81da49cd60f3d7d058fbc8ab5d2f00d1",
+      "sources": [
+        {
+          "path": "integrations/modernize/references/host-contract.md",
+          "sha256": "1533d272f45c23160853556387ed51af882f48bab65bfc271c646b0cc9f768d2"
+        }
+      ]
+    },
+    {
+      "path": "references/offline-ddl.md",
+      "sha256": "c79f425a09c693f8de202d14e4f9364b83c176b270288db88dd7a05d665dbaa2",
+      "sources": [
+        {
+          "path": "integrations/modernize/references/offline-ddl.md",
+          "sha256": "58056658d834b5ec3833aff9a054a268a5cee85c69fd7e83aae56a167eefedd4"
+        }
+      ]
+    },
+    {
+      "path": "scripts/detect-migration-scope.mjs",
+      "sha256": "15567eaf963958c4b100ffae8acdadee5a94ad6bb4a63163dd8616ef91a487d5",
+      "sources": [
+        {
+          "path": "scripts/detect-migration-scope.mjs",
+          "sha256": "cd5688d22bb25dccbc77df83276b978260f3497d6ba7042e649cec983875b741"
+        }
+      ]
+    },
+    {
+      "path": "scripts/index-postgres-ddl.mjs",
+      "sha256": "77adf28b6d5bcda24e629063cdc712261b0aa2ed5011d0a011ea356e059e9454",
+      "sources": [
+        {
+          "path": "scripts/index-postgres-ddl.mjs",
+          "sha256": "cbcbd94b0c1e25703f6b813c61101a2b2961ac82ce92de1b714672f86f0f53a4"
+        }
+      ]
+    },
+    {
+      "path": "scripts/modernize-assess.mjs",
+      "sha256": "fc8243be8de8e6086319e85fae9b5c990fcc343ff8e6f53e58071c99d73c521d",
+      "sources": [
+        {
+          "path": "scripts/modernize-assess.mjs",
+          "sha256": "0660a35fb8829df3cf27dda2d0f5e84b50a9fb0bf40a24eb7c8de957e5b9e5fe"
+        }
+      ]
+    },
+    {
+      "path": "scripts/modernize-common.mjs",
+      "sha256": "f74a3787e2989e1f2884154ccd3142bc718ca08064d461198d7df951edaf0322",
+      "sources": [
+        {
+          "path": "scripts/modernize-common.mjs",
+          "sha256": "ace240656384196856ea01de1d9de91e9897f8b5923537b6237fa063d1d4e643"
+        }
+      ]
+    },
+    {
+      "path": "scripts/modernize-context.mjs",
+      "sha256": "83997b7798f464e46fe97295f27bd48f1d493bbef2b21584e12fc28652500a4f",
+      "sources": [
+        {
+          "path": "scripts/modernize-context.mjs",
+          "sha256": "78d47626423905cd64020c2c83dd61eb4d20f468de2bf20eb2aab8290260cd47"
+        }
+      ]
+    },
+    {
+      "path": "scripts/postgres-ddl-parser.mjs",
+      "sha256": "a9522911814033c3334add329961e4df1dad7f40ffe11917e634910b71243387",
+      "sources": [
+        {
+          "path": "scripts/postgres-ddl-parser.mjs",
+          "sha256": "0f1d2b0db9b43b522455eec5d61a08bbdcf3773d63e43d9239b47ff74f0aaa03"
+        }
+      ]
+    },
+    {
+      "path": "scripts/source-comment-mask.mjs",
+      "sha256": "b3864779061bfb274c6d8c7a199c57b17129df3feca35b2f5c2875fd460e1e5d",
+      "sources": [
+        {
+          "path": "scripts/source-comment-mask.mjs",
+          "sha256": "60fbb56afed4978d514d0c2a61765898f63366cdba4afa71f3da8e539afd1edb"
+        }
+      ]
+    },
+    {
+      "path": "scripts/target-write-policy.mjs",
+      "sha256": "24bd463eabb63bd867eced59d0aae2c1355e9b7aa8af66bec10685be764f8050",
+      "sources": [
+        {
+          "path": "scripts/target-write-policy.mjs",
+          "sha256": "df7d4a91abc2cda4b63c182449251578523832feb05a6717deb8ef6b50596e23"
+        }
+      ]
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "04faf6cf2ab52b7572ed8e24a33de5af0bf5429edcbc9de1f047c735521c119c",
+      "sources": [
+        {
+          "path": "integrations/modernize/assessment/oracle-to-postgresql-app-assessment/SKILL.md",
+          "sha256": "c254b658914f4a81ea0e457d3d58ba7f6a0eaf9752570ff01d9c730f4f448bd8"
+        }
+      ]
+    }
+  ]
+}
