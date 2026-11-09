@@ -1,0 +1,87 @@
+{
+  "GeneratedAt": "2026-11-09T10:46:38.216370Z",
+  "ProjectPath": ".",
+  "Summary": {
+    "TotalFindings": 5,
+    "CveCount": 0,
+    "CweCount": 5,
+    "BySeverity": {
+      "mandatory": 0,
+      "optional": 2,
+      "potential": 3
+    },
+    "ByCategory": {
+      "Code Quality": 1,
+      "Credentials & Secrets": 3,
+      "Injection Attacks": 1
+    },
+    "TotalRulesAssessed": 59,
+    "RulesPassed": 54
+  },
+  "CveFindings": [],
+  "CweFindings": [
+    {
+      "Id": "CWE-772",
+      "Name": "Missing Release of Resource after Effective Lifetime",
+      "Category": "Code Quality",
+      "Severity": "potential",
+      "StoryPoint": 3,
+      "Description": "The product does not release a resource after its effective lifetime has ended, i.e., after the resource is no longer needed.",
+      "Files": [
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:179"
+      ],
+      "Explanation": "CreateAdminUser constructs a disposable PartsUnlimitedContext and passes it into a RoleStore, but neither the context nor the owning RoleManager is disposed after the startup operation. The context can retain database resources beyond the operation that created it."
+    },
+    {
+      "Id": "CWE-259",
+      "Name": "Use of Hard-coded Password",
+      "Category": "Credentials & Secrets",
+      "Severity": "optional",
+      "StoryPoint": 5,
+      "Description": "The product contains a hard-coded password, which it uses for its own inbound authentication or for outbound communication to external components.",
+      "Files": [
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config:12",
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:185-193"
+      ],
+      "Explanation": "A literal is configured for Authentication.Administrator.Password and Startup.Auth.CreateAdminUser reads it to create the inbound administrator account when that user is absent."
+    },
+    {
+      "Id": "CWE-778",
+      "Name": "Insufficient Logging",
+      "Category": "Credentials & Secrets",
+      "Severity": "potential",
+      "StoryPoint": 3,
+      "Description": "When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.",
+      "Files": [
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/AccountController.cs:48-76"
+      ],
+      "Explanation": "AccountController.Login handles successful, failed, locked-out, and verification-required authentication outcomes but records none of these security events in an audit or logging facility; the failed attempt path only adds a user-facing model error."
+    },
+    {
+      "Id": "CWE-798",
+      "Name": "Use of Hard-coded Credentials",
+      "Category": "Credentials & Secrets",
+      "Severity": "optional",
+      "StoryPoint": 5,
+      "Description": "The product contains hard-coded credentials, such as a password or cryptographic key.",
+      "Files": [
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config:12",
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:185-193"
+      ],
+      "Explanation": "A configured literal administrator password is consumed by CreateAdminUser to create the application administrator; this is a hard-coded credential in application configuration."
+    },
+    {
+      "Id": "CWE-99",
+      "Name": "Improper Control of Resource Identifiers ('Resource Injection')",
+      "Category": "Injection Attacks",
+      "Severity": "potential",
+      "StoryPoint": 3,
+      "Description": "The product receives input from an upstream component, but it does not restrict or incorrectly restricts the input before it is used as an identifier for a resource that may be outside the intended sphere of control.",
+      "Files": [
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/RecommendationsController.cs:22",
+        "IaaS2PaaSWeb/PartsUnlimitedWebsite/Recommendations/AzureMLFrequentlyBoughtTogetherRecommendationEngine.cs:35"
+      ],
+      "Explanation": "RecommendationsController.GetRecommendations accepts productId from the request and passes it to GetRecommendationsAsync. That value is interpolated directly into the external service URI query string at line 35 without restricting or encoding it, allowing query delimiters in the input to alter the requested resource/query."
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "id": "20261109104638",
+    "generated_at": "2026-11-09T10:46:38.0000000Z",
+    "note": "Security-only report (AppCAT was not run or failed)"
+  },
+  "security": [
+    {
+      "id": "CWE-772",
+      "title": "Missing Release of Resource after Effective Lifetime",
+      "category": "Code Quality",
+      "severity": "potential",
+      "description": "The product does not release a resource after its effective lifetime has ended, i.e., after the resource is no longer needed.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:179"
+        ],
+        "explanation": "CreateAdminUser constructs a disposable PartsUnlimitedContext and passes it into a RoleStore, but neither the context nor the owning RoleManager is disposed after the startup operation. The context can retain database resources beyond the operation that created it."
+      },
+      "storyPoint": 3
+    },
+    {
+      "id": "CWE-259",
+      "title": "Use of Hard-coded Password",
+      "category": "Credentials & Secrets",
+      "severity": "optional",
+      "description": "The product contains a hard-coded password, which it uses for its own inbound authentication or for outbound communication to external components.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config:12",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:185-193"
+        ],
+        "explanation": "A literal is configured for Authentication.Administrator.Password and Startup.Auth.CreateAdminUser reads it to create the inbound administrator account when that user is absent."
+      },
+      "storyPoint": 5
+    },
+    {
+      "id": "CWE-778",
+      "title": "Insufficient Logging",
+      "category": "Credentials & Secrets",
+      "severity": "potential",
+      "description": "When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/AccountController.cs:48-76"
+        ],
+        "explanation": "AccountController.Login handles successful, failed, locked-out, and verification-required authentication outcomes but records none of these security events in an audit or logging facility; the failed attempt path only adds a user-facing model error."
+      },
+      "storyPoint": 3
+    },
+    {
+      "id": "CWE-798",
+      "title": "Use of Hard-coded Credentials",
+      "category": "Credentials & Secrets",
+      "severity": "optional",
+      "description": "The product contains hard-coded credentials, such as a password or cryptographic key.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config:12",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs:185-193"
+        ],
+        "explanation": "A configured literal administrator password is consumed by CreateAdminUser to create the application administrator; this is a hard-coded credential in application configuration."
+      },
+      "storyPoint": 5
+    },
+    {
+      "id": "CWE-99",
+      "title": "Improper Control of Resource Identifiers ('Resource Injection')",
+      "category": "Injection Attacks",
+      "severity": "potential",
+      "description": "The product receives input from an upstream component, but it does not restrict or incorrectly restricts the input before it is used as an identifier for a resource that may be outside the intended sphere of control.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/RecommendationsController.cs:22",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Recommendations/AzureMLFrequentlyBoughtTogetherRecommendationEngine.cs:35"
+        ],
+        "explanation": "RecommendationsController.GetRecommendations accepts productId from the request and passes it to GetRecommendationsAsync. That value is interpolated directly into the external service URI query string at line 35 without restricting or encoding it, allowing query delimiters in the input to alter the requested resource/query."
+      },
+      "storyPoint": 3
+    }
+  ]
+}

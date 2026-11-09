@@ -1,0 +1,8 @@
+analysisCoverage: full
+security:
+  minimumCveSeverity: critical
+dotnet:
+  assessmentDomains:
+  - cloud-readiness
+  targetComputeServices:
+  - AppService.Windows
