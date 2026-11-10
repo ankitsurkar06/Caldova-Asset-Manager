@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "id": "20261110152526",
+    "generated_at": "2026-11-10T15:33:34.0151580Z",
+    "note": "Security-only report: AppCAT analysis failed because Visual Studio WebApplication MSBuild targets are unavailable in this Linux environment."
+  },
+  "security": [
+    {
+      "id": "CVE-2023-33170",
+      "title": "Microsoft Security Advisory CVE-2023-33170: .NET Security Feature Bypass Vulnerability",
+      "category": "CVE",
+      "severity": "mandatory",
+      "description": "[CVE-2023-33170](https://github.com/advisories/GHSA-25c8-p796-jg6r): Microsoft Security Advisory CVE-2023-33170: .NET Security Feature Bypass Vulnerability\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.AspNet.Identity.Owin 2.2.1 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12; vulnerable range < 2.2.4; first patched version 2.2.4)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12"
+        ],
+        "explanation": "[CVE-2023-33170](https://github.com/advisories/GHSA-25c8-p796-jg6r): Microsoft Security Advisory CVE-2023-33170: .NET Security Feature Bypass Vulnerability\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.AspNet.Identity.Owin 2.2.1 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12; vulnerable range < 2.2.4; first patched version 2.2.4)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version."
+      },
+      "storyPoint": 1
+    },
+    {
+      "id": "CVE-2022-29117",
+      "title": ".NET Denial of Service Vulnerability",
+      "category": "CVE",
+      "severity": "mandatory",
+      "description": "[CVE-2022-29117](https://github.com/advisories/GHSA-3rq8-h3gj-r5c6): .NET Denial of Service Vulnerability\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range < 4.2.2; first patched version 4.2.2)\n  - Microsoft.Owin.Security.Cookies 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31; vulnerable range < 4.2.2; first patched version 4.2.2)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31"
+        ],
+        "explanation": "[CVE-2022-29117](https://github.com/advisories/GHSA-3rq8-h3gj-r5c6): .NET Denial of Service Vulnerability\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range < 4.2.2; first patched version 4.2.2)\n  - Microsoft.Owin.Security.Cookies 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31; vulnerable range < 4.2.2; first patched version 4.2.2)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version."
+      },
+      "storyPoint": 1
+    },
+    {
+      "id": "CVE-2020-1045",
+      "title": "Cookie parsing failure",
+      "category": "CVE",
+      "severity": "mandatory",
+      "description": "[CVE-2020-1045](https://github.com/advisories/GHSA-hxrm-9w7p-39cc): Cookie parsing failure\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range < 4.1.1; first patched version 4.1.1)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28"
+        ],
+        "explanation": "[CVE-2020-1045](https://github.com/advisories/GHSA-hxrm-9w7p-39cc): Cookie parsing failure\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range < 4.1.1; first patched version 4.1.1)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version."
+      },
+      "storyPoint": 1
+    },
+    {
+      "id": "CVE-2021-21252",
+      "title": "Regular Expression Denial of Service in jquery-validation",
+      "category": "CVE",
+      "severity": "mandatory",
+      "description": "[CVE-2021-21252](https://github.com/advisories/GHSA-jxwx-85vp-gvwm): Regular Expression Denial of Service in jquery-validation\n\nSeverity: HIGH\n\nAffected dependencies:\n  - jQuery.Validation 1.16.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9; vulnerable range < 1.19.3; first patched version 1.19.3)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9"
+        ],
+        "explanation": "[CVE-2021-21252](https://github.com/advisories/GHSA-jxwx-85vp-gvwm): Regular Expression Denial of Service in jquery-validation\n\nSeverity: HIGH\n\nAffected dependencies:\n  - jQuery.Validation 1.16.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9; vulnerable range < 1.19.3; first patched version 1.19.3)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version."
+      },
+      "storyPoint": 1
+    },
+    {
+      "id": "CVE-2024-21907",
+      "title": "Improper Handling of Exceptional Conditions in Newtonsoft.Json",
+      "category": "CVE",
+      "severity": "mandatory",
+      "description": "[CVE-2024-21907](https://github.com/advisories/GHSA-5crp-9r3c-p9vr): Improper Handling of Exceptional Conditions in Newtonsoft.Json\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Newtonsoft.Json 10.0.3 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39; vulnerable range < 13.0.1; first patched version 13.0.1)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39"
+        ],
+        "explanation": "[CVE-2024-21907](https://github.com/advisories/GHSA-5crp-9r3c-p9vr): Improper Handling of Exceptional Conditions in Newtonsoft.Json\n\nSeverity: HIGH\n\nAffected dependencies:\n  - Newtonsoft.Json 10.0.3 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39; vulnerable range < 13.0.1; first patched version 13.0.1)\n\nRecommended fix:\n  - Upgrade to the first patched version or a later supported version."
+      },
+      "storyPoint": 1
+    },
+    {
+      "id": "CWE-1057",
+      "title": "Data Access Operations Outside of Expected Data Manager Component",
+      "category": "Code Quality",
+      "severity": "potential",
+      "description": "The product uses a dedicated, central data manager component as required by design, but it contains code that performs data-access operations that do not use this data manager.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs"
+        ],
+        "explanation": "Startup.Auth.CreateAdminUser constructs a concrete PartsUnlimitedContext directly when creating the RoleStore, instead of resolving/using the IPartsUnlimitedContext data-manager abstraction used throughout the application. This is a data-access operation outside the established context boundary (line 179)."
+      },
+      "storyPoint": 5
+    },
+    {
+      "id": "CWE-259",
+      "title": "Use of Hard-coded Password",
+      "category": "Credentials & Secrets",
+      "severity": "optional",
+      "description": "The product contains a hard-coded password, which it uses for its own inbound authentication or for outbound communication to external components.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs"
+        ],
+        "explanation": "The checked-in Web.config defines a nonempty Authentication.Administrator.Password app setting, and Startup.Auth.CreateAdminUser reads that setting to create the built-in administrator account. The credential is therefore a hard-coded password in configuration (Web.config line 12); the literal value is intentionally omitted."
+      },
+      "storyPoint": 5
+    },
+    {
+      "id": "CWE-778",
+      "title": "Insufficient Logging",
+      "category": "Credentials & Secrets",
+      "severity": "potential",
+      "description": "When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/AccountController.cs"
+        ],
+        "explanation": "AccountController.Login processes password sign-in and branches on the authentication result without recording successful or failed login attempts in an audit/security log (lines 48-57 and subsequent result handling). This leaves authentication events unauditable."
+      },
+      "storyPoint": 3
+    },
+    {
+      "id": "CWE-798",
+      "title": "Use of Hard-coded Credentials",
+      "category": "Credentials & Secrets",
+      "severity": "optional",
+      "description": "The product contains hard-coded credentials, such as a password or cryptographic key.",
+      "evidence": {
+        "files": [
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config",
+          "IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs"
+        ],
+        "explanation": "The checked-in Web.config defines a nonempty Authentication.Administrator.Password app setting, and Startup.Auth.CreateAdminUser reads that setting to create the built-in administrator account. The credential is therefore a hard-coded password in configuration (Web.config line 12); the literal value is intentionally omitted."
+      },
+      "storyPoint": 5
+    }
+  ],
+  "rules": {},
+  "projects": [
+    {
+      "properties": {
+        "repo": "Caldova-Asset-Manager",
+        "appName": "PartsUnlimitedWebsite",
+        "languages": [
+          "C#"
+        ],
+        "frameworks": [
+          "ASP.NET MVC 5",
+          "ASP.NET Web API 2"
+        ],
+        "tools": [
+          "MSBuild",
+          "NuGet"
+        ],
+        "description": "PartsUnlimited e-commerce web application",
+        "applicationType": "Web application"
+      },
+      "incidents": []
+    }
+  ]
+}
