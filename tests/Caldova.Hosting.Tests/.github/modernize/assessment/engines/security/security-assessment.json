@@ -1,0 +1,32 @@
+{
+  "GeneratedAt": "2026-11-11T05:28:31.543Z",
+  "ProjectPath": "tests/Caldova.Hosting.Tests",
+  "Summary": {
+    "TotalFindings": 1,
+    "CveCount": 0,
+    "CweCount": 1,
+    "BySeverity": {
+      "potential": 1
+    },
+    "ByCategory": {
+      "Credentials & Secrets": 1
+    },
+    "TotalRulesAssessed": 59,
+    "RulesPassed": 58
+  },
+  "CveFindings": [],
+  "CweFindings": [
+    {
+      "Id": "CWE-778",
+      "Name": "Insufficient Logging",
+      "Category": "Credentials & Secrets",
+      "Severity": "potential",
+      "StoryPoint": 3,
+      "Description": "When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.",
+      "Files": [
+        "IaaS2PaaSWeb/Caldova-Asset-Manager.Website/Controllers/AccountController.cs:30-35"
+      ],
+      "Explanation": "The Login action processes password sign-in results, including failed attempts and lockouts, but its failure branches only return a view or add a generic model error and do not record an application audit event. The application-specific telemetry provider logs generic external-operation exceptions, not these authentication outcomes."
+    }
+  ]
+}
