@@ -1,0 +1,30 @@
+{
+  "tool": "java-appcat-cli",
+  "version": "7.7.0.11",
+  "platforms": {
+    "linux-amd64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-linux-amd64-7.7.0.11.tar.gz",
+      "sha256": "13a497ee708f9b9bb59d0ecbceb191f8cae907d4d9d7bb42edd4678eddb6be5d"
+    },
+    "linux-arm64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-linux-arm64-7.7.0.11.tar.gz",
+      "sha256": "48ecf304ba8902927eecf67fc553d4d8623112fb500bc98774cffd2df3023799"
+    },
+    "macos-amd64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-macOS-amd64-7.7.0.11.tar.gz",
+      "sha256": "f0501fbd5872a3513935f663159be2e65f7ae9c7847ad13f4e06b8ee453572bf"
+    },
+    "macos-arm64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-macOS-arm64-7.7.0.11.tar.gz",
+      "sha256": "67259f58822df65aecf642b7d1d590f79a1beec0923189249ea65fcc1b42d08a"
+    },
+    "windows-amd64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-windows-amd64-7.7.0.11.zip",
+      "sha256": "191f7ce9f1fefd77585fe4865dc6d21f0ee7819df8842e7d8714b65c6bfef017"
+    },
+    "windows-arm64": {
+      "url": "https://download.visualstudio.microsoft.com/download/pr/95eb0363-282b-4e95-bcb7-ff1e3b4f9fe9/Java_Engineering_Group/AppCAT-for-java-cli/7.7.0.11/azure-migrate-appcat-for-java-cli-windows-arm64-7.7.0.11.zip",
+      "sha256": "50b31d8408936fdf7c3627605cb0dcb83c799c5d1a06e0dc09c17eec956f6a25"
+    }
+  }
+}
