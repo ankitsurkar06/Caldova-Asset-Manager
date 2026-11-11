@@ -1,0 +1,10 @@
+# Task 005 progress
+
+- Plan generation: completed; `005-plan.md` is the execution source.
+- Version control: status inspection unavailable; appmod-version-control discovery returned name only, no callable schema. Caller supplied branch `modernize/dotnet-20261023211948`. No direct git, branch switch, stash or commit.
+- Analysis: completed; upstream 001/004 remain blocked. Historical source ARM template also contained two actual password defaults; removed only those fields and verified semantic preservation.
+- Dependencies/configuration/code: implemented; scoped SDK4.6.0, existing Azure.Identity/Core retained, managed-identity-only vault boundary, explicit disabled provider switches, secret references and gated API client. No bootstrap settings. Boolean reader aligned across existing consumers. Disabled/expired/not-yet-valid secrets fail explicitly.
+- Verification: local Debug/Release website rebuilds and solution Debug build passed. Final offline checks: 45 secret assertions on both Release and Debug; all 44 existing MI assertions passed. Existing 003 structural and new 005 structural checks passed; all 81 package folders and HintPaths resolve. Initial Core warning fixed with narrow redirect; standalone csc still emits expected CS1701 with runtime policy verified by actual SDK construction. Existing Release CS1998 remains.
+- Mandatory MCP build/test/CVE/consistency/completeness checks: not executed; discovery returned names without callable definitions. Local checks are not represented as those tool passes. No existing unit-test project found; no unit-test pass or CVE scan claimed.
+- Summary: completed; see `005-summary.md` for exact commands, results, changed files and blockers. Operator documentation added.
+- Overall: independent feasible task-005 code and local checks implemented; overall acceptance pending/blocked by upstream .NET 10/004 and unavailable MCP checks/live external prerequisites. Confirmed plan/tasks/schema and previous task results unchanged. No direct git, branch changes, stash, provisioning, deployment or commits.

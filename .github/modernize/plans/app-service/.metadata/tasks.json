@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Original readiness work preserved. On 2026-10-29 the user additionally authorized a new Windows B1 App Service plan and web app, deployment and live hosting checks. Existing database and other services remain unchanged; CVE work remains excluded.",
+  "tasks": [
+    {
+      "type": "setupBaseline",
+      "id": "001-setupBaseline",
+      "description": "Freeze the current web application and establish a migration-focused behavior and dependency test specification.",
+      "reason": "Provide source-anchored evidence for the hosting migration without treating the historical .NET Framework assessment as the current implementation.",
+      "requirements": "Use create-test-baseline. Snapshot the website before any source mutation; analyze the snapshot so baseline work can proceed independently of hosting preparation. Capture only hosting-impacted journeys and configuration contracts: startup, missing configuration, HTTPS/redirects, authentication, static assets, SQL-backed cart and checkout, administration, SignalR, and restart behavior. Produce frozen test cases, safe test-data requirements, and an infra-decision-table. Use mocked dependencies initially; record real SQL, SMTP, enabled social providers, recommendations, and App Service runtime/network/storage checks as mandatory live gates where applicable. Record currently disabled integrations and SMS limitations. Do not claim a runnable source baseline or passing tests if required dependencies are unavailable. Do not create or migrate the database, provision resources, or add CVE work.",
+      "snapshotFolder": "IaaS2PaaSWeb\\Caldova-Asset-Manager.Website",
+      "status": "success",
+      "taskSummary": "Captured 318 website source files and passed the original Release build with zero warnings/errors. Frozen 16 hosting cases, three fixture files and user-confirmed mock dependency decisions in a baseline-only commit.",
+      "dependencies": []
+    },
+    {
+      "type": "transform",
+      "id": "002-transform-app-service-hosting",
+      "description": "Prepare the existing .NET 10 website for native Windows Azure App Service hosting while preserving its database and application behavior.",
+      "reason": "Current startup uses external configuration, process-local session/cache, optional file-based data-protection persistence, and hosting-sensitive HTTPS behavior that must be validated for App Service.",
+      "requirements": "Scope changes to the website and directly related tests/documentation. Baseline snapshot must exist before source edits. Preserve net10.0, existing SQL schema/authentication, routes, static assets and disabled optional integrations. Fail at startup for missing/empty/whitespace SQL configuration. Use absolute durable data-protection storage, with explicit KeyPath precedence and an App Service HOME default; reject missing HOME on App Service or missing production key storage outside App Service. Set identity/session cookies Secure in production and retain Development HTTP. Preserve native Windows IIS integration; do not trust arbitrary forwarded headers. Keep secrets external, /health liveness-only, one instance with process-local session/cache, and /signalr unchanged. Produce deployment instructions for an existing Windows target, not a deployment. Addresses current facts: lazy SQL validation, optional key persistence, SameAsRequest cookies, unverified publish/hosting contracts. No runtime upgrade, SQL migration, provisioning, deployment, containers, shared state or CVE work.",
+      "skills": [],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "status": "success",
+      "taskSummary": "Implemented fail-fast SQL-setting validation, absolute durable key storage with App Service HOME fallback and explicit errors, and Secure production identity/session/antiforgery cookies. Preserved Development HTTP, IIS integration, routes, existing SQL and single-instance state constraints. Excluded Models/project.json from publish and added the deployment runbook.",
+      "dependencies": []
+    },
+    {
+      "type": "integrationTest",
+      "id": "003-integrationTest",
+      "description": "Build integration tests for migrated Azure services and run post-migration verification",
+      "reason": "The user requested mocked integration verification and mandatory live checks before production; mock success alone cannot certify Azure hosting or database compatibility.",
+      "requirements": "Use verify-test-baseline and the frozen 16-case hosting specification, fixtures and mock decision table. Generate one outside-in test method per TC. Execute against the full web application with isolated EF test data and a pre-network SQL failure interceptor. Verify startup configuration errors, secure cookies, login after host restart using a shared test key directory, Development HTTP, host filtering, untrusted forwarded headers, static assets, production error responses and SignalR negotiation. Build and publish the web project in Release, verify generated IIS settings/runtime configuration/static content, and locally start the published artifact. Record actual counts and commands. Document live Azure/IIS/SQL checks as unexecuted release gates; do not claim mock results establish production readiness. No cloud writes, schema changes or CVE scanning.",
+      "status": "success",
+      "taskSummary": "Executed all 16 HostingPostMigrationIT cases: 16 passed, 0 failed/errors/skipped. Re-froze two incorrect original protocol assumptions without changing their production behavior. Release publish and exact IIS/runtime/static-content/exclusion checks passed. Published Production and Development processes passed local startup/HTTP probes and were stopped. Verified 220-entry, 11,663,099-byte deployment ZIP. Live Azure/IIS/SQL checks remain mandatory, unexecuted release gates.",
+      "dependencies": [
+        "001-setupBaseline",
+        "002-transform-app-service-hosting"
+      ]
+    },
+    {
+      "type": "infrastructure",
+      "id": "004-infrastructure-new-app-service",
+      "description": "Provision the approved new single-instance Windows B1 plan and web app.",
+      "requirements": "Use infra/infra-config.md and infra/appservice.bicep. Provision only the approved Windows plan, app and hosting settings in the existing resource group. Enable native .NET 10, 64-bit hosting, Production, host filtering, HTTPS Only, TLS 1.2 minimum and WebSockets. Keep basic publishing authentication disabled. Do not provision or migrate database, networking or optional services; never store credentials.",
+      "skills": [],
+      "iacType": "bicep",
+      "provision": true,
+      "status": "success",
+      "taskSummary": "Bicep compiled and Azure validation/provisioning succeeded. Confirmed Windows .NET v10.0, 64-bit, HTTPS Only, TLS 1.2 minimum, WebSockets and a one-instance B1 plan. No dependent services or database were provisioned.",
+      "dependencies": []
+    },
+    {
+      "type": "security",
+      "id": "005-security-deferred",
+      "description": "Dependency security scan and remediation deferred by explicit user choice.",
+      "requirements": "Do not run security/CVE scanning or modify packages in this deployment phase.",
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "status": "skipped",
+      "taskSummary": "User confirmed security/CVE work remains deferred.",
+      "dependencies": []
+    },
+    {
+      "type": "deployment",
+      "id": "006-deployment-new-app-service",
+      "description": "Deploy the tested website and verify the new Windows App Service host.",
+      "requirements": "Rerun the existing 16-case hosting suite, publish a fresh Release artifact, inspect generated IIS/runtime settings and package root, and verify actual host runtime support. The operator subsequently confirmed SQL configuration was not ready and explicitly requested package deployment with the app left stopped. Deploy with Azure identity, verify persisted deployment metadata, stop the app and confirm its final state. Do not expose secrets, use a placeholder database connection, write test data, migrate the database or cut over existing hostnames. Defer startup/live checks to 007-integrationTest-live-hosting; liveness is not database readiness.",
+      "skills": [],
+      "targetAzureService": "Azure App Service",
+      "resourceStatus": "Create a new web app and Windows B1 plan in the existing resource group.",
+      "deploymentTool": "bicep",
+      "status": "success",
+      "taskSummary": "All 16 local tests passed, Release package checks passed, and the actual 64-bit Azure host has .NET/ASP.NET Core 10.0.13 and 10.0.14. Identity-authenticated ZIP deployment succeeded; persisted deployment metadata independently confirmed success/complete/active. App stopped and final Stopped state confirmed per user instruction. SQL configuration and live startup validation remain pending.",
+      "dependencies": [
+        "003-integrationTest",
+        "004-infrastructure-new-app-service"
+      ]
+    },
+    {
+      "type": "integrationTest",
+      "id": "007-integrationTest-live-hosting",
+      "description": "Complete live hosting verification after the existing SQL connection is securely configured.",
+      "reason": "The package is deployed but the operator requested that the app remain stopped until SQL settings are available.",
+      "requirements": "Do not start until the operator supplies the real existing DefaultConnectionString and authorizes continuation. Reuse the frozen hosting contracts to verify public HTTPS, liveness JSON, assets, SignalR and durable key storage across restart. Record actual SQL connectivity and approved user journeys separately; do not write test records or cut over production without approval. External service modernization, database migration and CVE work remain excluded.",
+      "status": "pending",
+      "taskSummary": "Blocked on secure existing SQL configuration. Startup, HTTPS/SignalR/browser checks, restart/key persistence and database readiness are unverified.",
+      "dependencies": [
+        "001-setupBaseline",
+        "002-transform-app-service-hosting",
+        "004-infrastructure-new-app-service",
+        "006-deployment-new-app-service"
+      ]
+    }
+  ],
+  "metadata": {
+    "planName": "Caldova Asset Manager to Azure App Service",
+    "projectName": "Caldova-Asset-Manager",
+    "language": "dotnet",
+    "createdAt": "2026-10-27T22:31:17.754+05:30",
+    "version": "1.0"
+  }
+}

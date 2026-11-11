@@ -1,0 +1,69 @@
+using CaldovaAssetManager.Models;
+using System;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+
+namespace CaldovaAssetManager.Areas.Admin.Controllers
+{
+    public class CustomerController : AdminController
+    {
+        private readonly ICaldovaAssetManagerContext _context;
+
+        public CustomerController(ICaldovaAssetManagerContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<ActionResult> Index(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Redirect("Find");
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return Redirect("Find");
+            }
+
+            return View(user);
+        }
+
+        public async Task<ActionResult> Find(string username, string email, string phoneNumber)
+        {
+            IQueryable<ApplicationUser> query = _context.Users;
+
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                query = query.Where(u => u.UserName == username);
+            }
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                query = query.Where(u => u.Email == email);
+            }
+
+            if (!string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                query = query.Where(u => u.PhoneNumber == phoneNumber);
+            }
+
+            // We only want cases where there is one instance.  SingleOrDefault will throw an exception
+            // when there is more than one, so we take two and only use the result if it was the only one
+            var result = await query.Take(2).ToListAsync();
+
+            if (result.Count == 1)
+            {
+                return RedirectToAction("Index", new { id = result[0].Id });
+            }
+
+            return View();
+        }
+    }
+}

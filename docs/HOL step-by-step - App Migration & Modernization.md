@@ -184,7 +184,7 @@ In this exercise, you will set up your environment for use for the rest of the e
 - Database Login Name: workshopServiceAcc  
 - Database User Name: workshopServiceAcc  
 - Database User Password: P2ssw0rd
-- Database Name: partsUnlimitedDB
+- Database Name: CaldovaAssetManagerDB
 
 **Note**: if you don't have a Visual Studio Enterprise License, please select the community edition for the Dev Workstation OS Version.
 
@@ -210,9 +210,9 @@ Once the deployment is complete, review the vmweb01 configuration to find the pu
 
   ![VM Web 01 URL](./media/image9-vm-dns-name.jpeg)
 
-You should see the Parts Unlimited web site launch like below.
+You should see the Caldova-Asset-Manager web site launch like below.
 
-  ![Parts Unlimited Web App](./media/image10-vm-web-app-running.jpeg)
+  ![Caldova-Asset-Manager Web App](./media/image10-vm-web-app-running.jpeg)
 
 ### Task 2: Validate you can connect to the Development Environment
 
@@ -228,7 +228,7 @@ Now that the environment is set up, we need to make sure we can connect to the d
 
     ![Visual Studio Sing In](./media/image12-vs-sign-in.png)
 
-5. Open the Solution which is located at **C:\\Source\\AppWorkshop\\IaaS2PaaSWeb\\IaaS2PaaSWeb.sln**
+5. Open the Solution which is located at **C:\\Source\\AppWorkshop\\IaaS2PaaSWeb\\Caldova-Asset-Manager.sln**
 
 Write the values defined during the setup:
 
@@ -244,12 +244,12 @@ While this is just the initial setup process, note that everything has been auto
 
 **Duration**: 30 minutes
 
-Parts Unlimited is in the auto part business. They typically sell via a brick and mortar store but have invested in a small e-commerce presence to augment those stores. They have seen an uptick in use from customers and have been getting some complaints about the speed of the site and requests for additional features and functionality.
+Caldova-Asset-Manager is in the auto part business. They typically sell via a brick and mortar store but have invested in a small e-commerce presence to augment those stores. They have seen an uptick in use from customers and have been getting some complaints about the speed of the site and requests for additional features and functionality.
 
-Parts Unlimited would like to expand and improve their ecommerce presence, experiment with new features and business strategies to help grow the business. However, they are not interested in sinking large sums of money into hardware and the management of that hardware. They want to quickly spin something up to see how it works, scale it if it
+Caldova-Asset-Manager would like to expand and improve their ecommerce presence, experiment with new features and business strategies to help grow the business. However, they are not interested in sinking large sums of money into hardware and the management of that hardware. They want to quickly spin something up to see how it works, scale it if it
 does, and deprovision it if it doesn’t. They also want more flexibility in how they scale their solutions given the seasonal nature of what they do.
 
-Currently, Parts Unlimited consists of an ASP.NET 4.5.1 website running on Microsoft Windows 2016 and SQL database running on Microsoft SQL 2016. You need to migrate that application to a Microsoft Azure App Service Web Site and a Microsoft SQL Azure Database.
+Currently, Caldova-Asset-Manager consists of an ASP.NET 4.5.1 website running on Microsoft Windows 2016 and SQL database running on Microsoft SQL 2016. You need to migrate that application to a Microsoft Azure App Service Web Site and a Microsoft SQL Azure Database.
 
 With the website migrated, you immediately gain new capabilities that you can use to improve your site and accelerate business value:
 
@@ -261,7 +261,7 @@ With the website migrated, you immediately gain new capabilities that you can us
 - Security Center
 - No OS to manage or patch
 
-These features setup Parts Unlimited for future enhancement and scale without having to plan for and manage infrastructure.
+These features setup Caldova-Asset-Manager for future enhancement and scale without having to plan for and manage infrastructure.
 
 **References**
 
@@ -440,7 +440,7 @@ So far, we have been running against the database running on our VM.  In this ta
 
   ![](./media/e1t3i3.png)
 
-5. Select the 'partsUnlimitedDB' and then click 'Add'
+5. Select the 'CaldovaAssetManagerDB' and then click 'Add'
 
   ![](./media/e1t3i4.png)
 
@@ -460,7 +460,7 @@ So far, we have been running against the database running on our VM.  In this ta
 
   ![](./media/e1t3i8.png)
 
-10. Select the database that you want to migrate, in this case, the partsUnlimitedDB.  Then click 'Next'.
+10. Select the database that you want to migrate, in this case, the CaldovaAssetManagerDB.  Then click 'Next'.
 
   ![](./media/e1t3i9.png)
 
@@ -514,7 +514,7 @@ So far, we have been running against the database running on our VM.  In this ta
 
   ![](./media/e1t3i24.png)
 
-22.  Select 'partsUnlimitedDB' as your target database and click 'Next'
+22.  Select 'CaldovaAssetManagerDB' as your target database and click 'Next'
 
   ![](./media/e1t3i25.png)
 
@@ -560,7 +560,7 @@ Almost done.  We need to configure our app service to use SQL Azure , remove the
 
   ![](./media/e1t4i3.png)
 
-4. Next we need to grab the connection string for your SQL Azure database.  Back to your resource group, click on the partsUnlimitedDB.
+4. Next we need to grab the connection string for your SQL Azure database.  Back to your resource group, click on the CaldovaAssetManagerDB.
 
   ![](./media/e1t4i4.png)
 
@@ -597,7 +597,7 @@ Almost done.  We need to configure our app service to use SQL Azure , remove the
 
 **Duration**: 45 minutes
 
-Parts Unlimited wants to improve their deployment process to enable more agility. Currently, Parts Unlimited has a very manual deployment process. Developers document the install steps and operations performs the deployment. This process worked when they pushed code only a few times a year. However, the goal is to rapidly deliver value in days as opposed to months.
+Caldova-Asset-Manager wants to improve their deployment process to enable more agility. Currently, Caldova-Asset-Manager has a very manual deployment process. Developers document the install steps and operations performs the deployment. This process worked when they pushed code only a few times a year. However, the goal is to rapidly deliver value in days as opposed to months.
 
 Currently, there is no automated deployment process.  has been chosen as the ALM/DevOps platform moving forward. You will implement a CI/CD process from Team Services to Azure. Once the CI/CD process is in place you can quickly deploy changes to production with full traceability. The automation not only shortens your delivery time, it also dramatically improves the repeatability. Additionally, you can add unit testing, automated UI testing, Load Testing, Manual Testing, approval processes, etc. to ensure you do not sacrifice quality for speed.
 
@@ -871,7 +871,7 @@ The CI/CD pipeline is complete.  Queue a new build and follow the build/release
 
 **Duration:** 45 minutes
 
-Parts Unlimited understands that bad experiences online will quickly drive a customer to your competitor. With that in mind, they want to gain better visibility into issues customers are experiencing while using their site.
+Caldova-Asset-Manager understands that bad experiences online will quickly drive a customer to your competitor. With that in mind, they want to gain better visibility into issues customers are experiencing while using their site.
 
 In addition to gaining better insights into the sites health, they are also interested in better understanding how customers are using the site and the sites effectiveness.
 
@@ -1376,7 +1376,7 @@ SQL Database automatically creates database backup and uses Azure read-access ge
 
 > ![Configure Long-term backup retention for database](./media/image176.png)
 
-Our business requirements us to have 120 days back up, therefore, we need to configure the Long-term backup retention. Navigation to the SQL Server and under the Settings section, click on **Long-term backup retention.** Select the **PartsUnlimitedDB** from the available databases. In the Configure Policies, click **Weekly Backups**, type **120** for the length and change the drown down interval to **Days**. When done, click **Apply.**
+Our business requirements us to have 120 days back up, therefore, we need to configure the Long-term backup retention. Navigation to the SQL Server and under the Settings section, click on **Long-term backup retention.** Select the **CaldovaAssetManagerDB** from the available databases. In the Configure Policies, click **Weekly Backups**, type **120** for the length and change the drown down interval to **Days**. When done, click **Apply.**
 
 > ![Configure database retention policies](./media/image177.png)
 
@@ -1384,7 +1384,7 @@ Our business requirements us to have 120 days back up, therefore, we need to con
 
 **Duration**: 30 minutes
 
-As the improvements have been rolling out to the Parts Unlimited site, marketing has been ramping up its advertising causing an uptick in traffic. While this is exactly what the company wants, it has caused some latency issues. Improvements need to be made to the Parts Unlimited site to reduce latency and improve end user experience. This must be done quickly as there are additional marketing campaigns on the horizon.
+As the improvements have been rolling out to the Caldova-Asset-Manager site, marketing has been ramping up its advertising causing an uptick in traffic. While this is exactly what the company wants, it has caused some latency issues. Improvements need to be made to the Caldova-Asset-Manager site to reduce latency and improve end user experience. This must be done quickly as there are additional marketing campaigns on the horizon.
 
 To solve the performance issues as quickly as possible, we are going to implement a Content Delivery Network for our site. It has been decided that the entire site will be cached with CDN.
 
@@ -1511,7 +1511,7 @@ Set the permission to "Public read access for blobs only" to allow them to be ac
 
 > ![Set container access level to Public read access for blobs only](./media/image193.png)
 
-Then proceed to copy all the files in the "/images" folder inside of the PartsUnlimitedWebsite
+Then proceed to copy all the files in the "/images" folder inside of the Caldova-Asset-Manager.Website
 
 > ![Upload files to images container](./media/image194.png)
 
@@ -1525,11 +1525,11 @@ We now need to add an Application Setting to use as source for the images, say w
 
 > ![Add a CDNUrl app setting](./media/image196.png)
 
-Adding it without value will ensure the changes we are introducing do not change the behavior of the application. Now to make it easier to use, we already have a **ConfigurationHelpers** class in the project, so we can add the **PartsUnlimited.Utils** namespace in the **Views/web.config** file to make it easier to use in our views. This will shorten using this class in all places where we need it.
+Adding it without value will ensure the changes we are introducing do not change the behavior of the application. Now to make it easier to use, we already have a **ConfigurationHelpers** class in the project, so we can add the **CaldovaAssetManager.Utils** namespace in the **Views/web.config** file to make it easier to use in our views. This will shorten using this class in all places where we need it.
 
-> ![Add PartsUnlimited.Utils namespace to view/web.config](./media/image197.png)
+> ![Add CaldovaAssetManager.Utils namespace to view/web.config](./media/image197.png)
 
-Now let's find the views that need to use the CDN for images, say we only concentrate on the product images, so find the pattern **./@** in the **PartsUnlimitedWebsite** project:
+Now let's find the views that need to use the CDN for images, say we only concentrate on the product images, so find the pattern **./@** in the **Caldova-Asset-Manager.Website** project:
 
 > ![Find usage of images in solution](./media/image198.png)
 
@@ -1588,7 +1588,7 @@ It has come to the businesses attention that customers are experiencing slow.
 
 ### Task 1: Provisioning the Redis Cache Service
 
-Create a new Redis Cache service to use with the Parts Unlimited Website. Click to create a new resource and search for **Redis Cache**, once found highlight and click on the **Create** button:
+Create a new Redis Cache service to use with the Caldova-Asset-Manager Website. Click to create a new resource and search for **Redis Cache**, once found highlight and click on the **Create** button:
 
 ![Provision Azure Redis Cache](./media/image201.png)
 
@@ -1619,7 +1619,7 @@ Remote into the **vmdev01** using the User Name and Password used when creating 
 
 Upgrade Project to target .Net Framework 4.5.2
 
-Install the NuGet package **Microsoft.Web.RedisSessionStateProvider** in the **PartsUnlimitedWebsite** project. Notice the latest version does not work the .Net Framework version of this project, so you must choose version **3.0.2**
+Install the NuGet package **Microsoft.Web.RedisSessionStateProvider** in the **Caldova-Asset-Manager.Website** project. Notice the latest version does not work the .Net Framework version of this project, so you must choose version **3.0.2**
 
 Modify the **Web.config** to add a new connection string replacing the
 \[SERVER\_NAME\] and \[KEY\] values.
@@ -1654,7 +1654,7 @@ To prove this works, scale out to 2 instances, repeat adding some products to th
 
 The next thing we want to do is reduce the memory footprint and speed up the output when customers browse the store front. While we have some performance gains by adding a CDN across the site, we also can make further improvements by making some minor changes to our code based specific to the store.
 
-Install the NuGet package **Microsoft.Web.RedisOutputCacheProvider** in the **PartsUnlimitedWebsite** project.
+Install the NuGet package **Microsoft.Web.RedisOutputCacheProvider** in the **Caldova-Asset-Manager.Website** project.
 
 Second, add the following section in the **Web.config** file, within the
 **system.web** element:
@@ -1695,7 +1695,7 @@ You can verify by adding a breakpoint inside the methods and visiting a product 
 
 This next section, we will demonstrate how to reduce the amount of database utilization by using Redis as a custom caching provider. This will require some custom code.
 
-If not already installed, install the NuGet package **StackExchange.Redis.StrongName** in the **PartsUnlimitedWebsite** project.
+If not already installed, install the NuGet package **StackExchange.Redis.StrongName** in the **Caldova-Asset-Manager.Website** project.
 
 Right-Click on the PartsUnlintedWebSite project name in Solution Explorer. Select **Manage NuGet Packages…** from the available options.
 From the NuGet Manager screen on the Browse tab, search for **StackExchange.Redis.StrongName** and **Install** the latest version.
@@ -1711,7 +1711,7 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace PartsUnlimited.Utils
+namespace CaldovaAssetManager.Utils
 {
     static class RedisHelper
     {
@@ -1788,7 +1788,7 @@ namespace PartsUnlimited.Utils
 
 ```csharp
 using System;
-namespace PartsUnlimited.Models
+namespace CaldovaAssetManager.Models
 {
     [Serializable]
     public class Category
@@ -1840,7 +1840,7 @@ If everything works as expected, then comment and commit/sync your code into Azu
 It has come to the businesses attention that customers are not able to find what they are looking for easily. After some investigation it was determined that the existing search capabilities were not adequate and needed to be updated. To improve the application’s search capability as quickly as possible, with as little code as possible, while ensuring the ability to support the sites growing traffic, Azure Search will be implemented.
 
 - Go to the Azure Portal
-- Look at the Parts Unlimited DB config
+- Look at the Caldova-Asset-Manager DB config
 - Add Azure Search
 - Create a branch
 - Modify the application to use Azure Search
@@ -1856,7 +1856,7 @@ It has come to the businesses attention that customers are not able to find what
 
 Current search is based on SQL queries and prone to bad results. Doing a search like "jumper" or "leads" will return a product match like the following:
 
-> ![Parts Unlimited Search](./media/image205.png)
+> ![Caldova-Asset-Manager Search](./media/image205.png)
 
 Clicking on the Product, we can see a lot more text that could be searched for:
 
@@ -1880,7 +1880,7 @@ After the service is created, we must proceed to create an index and populate it
 
 > ![Import Data in Azure Search](./media/image210.png)
 
-Provide the details for a data source, selecting the type of source, in our case **Azure SQL Database** and providing the connection string values and selecting the **Table/View** of **Products**: For the name, since this is a unique value, type in the host name associated with the application. After typing the name, select the partsUnlimitedDB for the database, UserId, and Password, click on **Test connection** in order to verify the credentials are correct.
+Provide the details for a data source, selecting the type of source, in our case **Azure SQL Database** and providing the connection string values and selecting the **Table/View** of **Products**: For the name, since this is a unique value, type in the host name associated with the application. After typing the name, select the CaldovaAssetManagerDB for the database, UserId, and Password, click on **Test connection** in order to verify the credentials are correct.
 
 **Note**: Use the same name for the database that you used when you created the environment. Note, you may also need to change the login to \[username\]@hostname.
 
@@ -1905,7 +1905,7 @@ Clicking Ok on the Import Data blade after all details are provided would trigge
 
 Remote into the **vmdev01** using the User Name and Password used when creating the environment.
 
-Upgrade the **PartsUnlimitedWebsite** project to target at least the **.Net Framework 4.5.2** to be able to use the Azure Search SDK. This is done via the properties page of the project.
+Upgrade the **Caldova-Asset-Manager.Website** project to target at least the **.Net Framework 4.5.2** to be able to use the Azure Search SDK. This is done via the properties page of the project.
 
 You must add the NuGet package **Microsoft.Azure.Search** that will enable us to code against the Azure Search service. This can be done from the Package Manager Console with the following command:
 
@@ -1918,7 +1918,7 @@ Add some entries in the **Web.config** that will be used to setup the values for
 > ![Azure Search Query Keys](./media/image216.png)
 
 ```xml
-<add key="SearchServiceName" value="partsunlimited" />
+<add key="SearchServiceName" value="CaldovaAssetManager" />
 <add key="SearchServiceQueryApiKey" value="*************" />
 <add key="SearchServiceIndexName" value="products-index" />
 ```
@@ -1934,9 +1934,9 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
-using PartsUnlimited.Models;
+using CaldovaAssetManager.Models;
 
-namespace PartsUnlimited.ProductSearch
+namespace CaldovaAssetManager.ProductSearch
 {
     public class AzureIndexProductSearch : IProductSearch
     {
@@ -2013,9 +2013,9 @@ When you’re all done verifying the search is working on your local machine, co
 
 **Duration**: 45 minutes
 
-Parts Unlimited has been growing. The business wants to start building relationships with other retailers, so they can sell their product through multiple channels, not just Parts Unlimited.
+Caldova-Asset-Manager has been growing. The business wants to start building relationships with other retailers, so they can sell their product through multiple channels, not just Caldova-Asset-Manager.
 
-To get started, the Parts Unlimited site needs to be improved architecturally so portions of its functionality can be reused when integrating with third parties. To accomplish this, the products model will be split into a reusable class. Functions will then be built using this class. Next, the Parts Unlimited website will be modified to use the Azure functions as opposed to accessing the database directly.
+To get started, the Caldova-Asset-Manager site needs to be improved architecturally so portions of its functionality can be reused when integrating with third parties. To accomplish this, the products model will be split into a reusable class. Functions will then be built using this class. Next, the Caldova-Asset-Manager website will be modified to use the Azure functions as opposed to accessing the database directly.
 
 **References**
 
@@ -2024,7 +2024,7 @@ To get started, the Parts Unlimited site needs to be improved architecturally so
 
 ### Task 1: Refactor
 
-Add a new **PartsUnlimitedModels** Class Library (.Net Framework) project to the Visual Studio solution to move all models classes, make sure to select **.Net Framework 4.5.2**:
+Add a new **CaldovaAssetManagerModels** Class Library (.Net Framework) project to the Visual Studio solution to move all models classes, make sure to select **.Net Framework 4.5.2**:
 
 > ![Add new project](./media/image218.png)
 >
@@ -2043,21 +2043,21 @@ Add an assembly reference to **System.Web**
 
 > ![Adding System.Web reference](./media/image220.png)
 
-Move the **Models** directory and all files within it to the **PartsUnlimitedModels** project:
+Move the **Models** directory and all files within it to the **CaldovaAssetManagerModels** project:
 
-> ![PartsUnlimitedModels Project](./media/image221.png)
+> ![CaldovaAssetManagerModels Project](./media/image221.png)
 
-Add a project reference in **PartsUnlimitedWebsite** to **PartsUnlimitedModels** and make sure it still builds successfully:
+Add a project reference in **Caldova-Asset-Manager.Website** to **CaldovaAssetManagerModels** and make sure it still builds successfully:
 
-> ![Add PartsUnlimitedModels Project Reference](./media/image222.png)
+> ![Add CaldovaAssetManagerModels Project Reference](./media/image222.png)
 >
-> ![Add PartsUnlimitedModels Project Reference](./media/image223.png)
+> ![Add CaldovaAssetManagerModels Project Reference](./media/image223.png)
 
 Build and run the solution to ensure everything compiles and runs okay.
 
 ### Task 2: Modernize
 
-Add a new **Azure Functions** project to the solution called **PartsUnlimitedStoreService** using the **Cloud** templates:
+Add a new **Azure Functions** project to the solution called **CaldovaAssetManagerStoreService** using the **Cloud** templates:
 
 > ![Add new Azure Functions Project](./media/image224.png)
 
@@ -2065,13 +2065,13 @@ When creating a new Azure Functions project, make sure to change the framework t
 
 > ![Add new Azure Functions Project](./media/image225.png)
 
-**Note**: Make sure the **PartsUnlimitedModels** and **PartsUnlimitedStoreService** projects are both running the same .NET framework version
+**Note**: Make sure the **CaldovaAssetManagerModels** and **CaldovaAssetManagerStoreService** projects are both running the same .NET framework version
 
-After the project is created, we’ll create three new Functions. The 3 functions in the Function App: **BrowseCategory**, **GetCategories** & **GetProductDetails** to provide the functionality currently available in the **StoreController** in the **PartsUnlimitedWebsite** project. They should be accessed via URLs in the form **"/api/categories"**, **"/api/categories/{id}"** & **"/api/products/{id}"** respectively.
+After the project is created, we’ll create three new Functions. The 3 functions in the Function App: **BrowseCategory**, **GetCategories** & **GetProductDetails** to provide the functionality currently available in the **StoreController** in the **Caldova-Asset-Manager.Website** project. They should be accessed via URLs in the form **"/api/categories"**, **"/api/categories/{id}"** & **"/api/products/{id}"** respectively.
 
 > ![Add Class](./media/image226.png)
 
-Right click on the new **PartsUnlimitedStoreService** project, choose **Add**, **New Azure Function**.
+Right click on the new **CaldovaAssetManagerStoreService** project, choose **Add**, **New Azure Function**.
 
 > ![New Azure Function](./media/image227.png)
 
@@ -2079,9 +2079,9 @@ Select the **Http trigger** and the Access Rights as **Function**.
 
 > ![New Azure Function](./media/image228.png)
 
-Next, make a reference to our **PartsUnlimitedModels** project:
+Next, make a reference to our **CaldovaAssetManagerModels** project:
 
-> ![Add reference to PartsUnlimitedModels Project](./media/image229.png)
+> ![Add reference to CaldovaAssetManagerModels Project](./media/image229.png)
 
 Add a reference to the same version of the **EntityFramework** that you’re using in the web project. In the Solution Explorer, right-click on dependencies and select **Manage NuGet Package.** Click the **Browse** tab and search for EntityFramework.
 
@@ -2095,7 +2095,7 @@ Notice that for this to work, we will need the connection string to the database
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
   },
   "ConnectionStrings": {
-    "DefaultConnectionString": "Server=(localdb)\\mssqllocaldb;Database=PartsUnlimitedWebsite;Integrated Security=True;"
+    "DefaultConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Caldova-Asset-Manager.Website;Integrated Security=True;"
   }
 }
 ```
@@ -2108,7 +2108,7 @@ Create a new class called **GlobalConfiguration.cs** and replace its contents wi
 using System.Net.Http;
 using System.Web.Http;
 
-namespace PartsUnlimitedStoreService
+namespace CaldovaAssetManagerStoreService
 {
     internal static class GlobalConfiguration
     {
@@ -2136,9 +2136,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using PartsUnlimited.Models;
+using CaldovaAssetManager.Models;
 
-namespace PartsUnlimitedStoreService
+namespace CaldovaAssetManagerStoreService
 {
     public static class GetCategories
     {
@@ -2149,7 +2149,7 @@ namespace PartsUnlimitedStoreService
 
             log.Info("Retrieving Product Categories");
 
-            var db = new PartsUnlimitedContext();
+            var db = new CaldovaAssetManagerContext();
             var categories = await db.Categories.ToListAsync();
 
             return req.CreateResponse(HttpStatusCode.OK, categories);
@@ -2170,9 +2170,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using PartsUnlimited.Models;
+using CaldovaAssetManager.Models;
 
-namespace PartsUnlimitedStoreService
+namespace CaldovaAssetManagerStoreService
 {
     public static class BrowseCategory
     {
@@ -2186,7 +2186,7 @@ namespace PartsUnlimitedStoreService
             if (!id.HasValue)
                 return req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a valid category ID");
 
-            var db = new PartsUnlimitedContext();
+            var db = new CaldovaAssetManagerContext();
             var genreModel = await db.Categories.Include("Products").SingleAsync(g => g.CategoryId == id.Value);
 
             return req.CreateResponse(HttpStatusCode.OK, genreModel);
@@ -2207,9 +2207,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using PartsUnlimited.Models;
+using CaldovaAssetManager.Models;
 
-namespace PartsUnlimitedStoreService
+namespace CaldovaAssetManagerStoreService
 {
     public static class GetProductDetails
     {
@@ -2223,7 +2223,7 @@ namespace PartsUnlimitedStoreService
             if (!id.HasValue)
                 return req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a valid product id");
 
-            var db = new PartsUnlimitedContext();
+            var db = new CaldovaAssetManagerContext();
             var product = await db.Products.SingleAsync(a => a.ProductId == id.Value);
 
             return req.CreateResponse(HttpStatusCode.OK, product);
@@ -2232,9 +2232,9 @@ namespace PartsUnlimitedStoreService
 }
 ```
 
-The function can now be tested locally using an Http Client like Postman or any other of your choice. To test, right-click on **PartsUnlimitedStoreService** as click on **Set as Startup Project**.
+The function can now be tested locally using an Http Client like Postman or any other of your choice. To test, right-click on **CaldovaAssetManagerStoreService** as click on **Set as Startup Project**.
 
-> ![Set PartsUnlimitedStoreService as startup project](./media/image230.png)
+> ![Set CaldovaAssetManagerStoreService as startup project](./media/image230.png)
 
 If prompted to install the Azure Function CLI tools, click **Yes**.
 
@@ -2250,7 +2250,7 @@ Run Postman from the Desktop and issue a GET against the **GetCategories** /api/
 
 ### Task 3: Integrate
 
-Replace the code in **StoreController.cs** in the **PartsUnlimitedWebsite** project to retrieve data from the Function App by making a REST call to the appropriate endpoint.
+Replace the code in **StoreController.cs** in the **Caldova-Asset-Manager.Website** project to retrieve data from the Function App by making a REST call to the appropriate endpoint.
 
 **Tip**: Using a utility class like **System.Net.Http.HttpClient** makes it easy to implement the calls and writing a generic method convenient for reusability.
 
@@ -2293,12 +2293,12 @@ private static async Task<T> GetFromStoreService<T>(string path)
 Add the **System.Threading.Tasks**, **System.Collections.Generic, System.Net.Http, and System.Net.Http.Headers**, **System.Net**; reference to the top of the class. Then replace the Intex(), Browse(int), Details(int) methods with the ones below. Notice the public methods in the class can be implemented in an asynchronous way and simpler:
 
 ```csharp
-using PartsUnlimited.Models;
+using CaldovaAssetManager.Models;
 using System;
 using System.Runtime.Caching;
 using System.Web.Mvc;
-using PartsUnlimited.Utils;
-using PartsUnlimited.ViewModels;
+using CaldovaAssetManager.Utils;
+using CaldovaAssetManager.ViewModels;
 using System.Net.Http;
 using System.Configuration;
 using System.Net.Http.Headers;
@@ -2306,7 +2306,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace PartsUnlimited.Controllers
+namespace CaldovaAssetManager.Controllers
 {
     public class StoreController : Controller
     {
@@ -2351,7 +2351,7 @@ namespace PartsUnlimited.Controllers
 
 Test locally and ensure everything works as expected and no functionality has been affected from the website standpoint.
 
-In Solution Explorer, right-click on the Solution and click **Set Startup Projects**. Select Multiple startup projects and for the action for **PartsUnlimitedStoreService** and **PartsUnlimitedWebsite**, choose **Start**.
+In Solution Explorer, right-click on the Solution and click **Set Startup Projects**. Select Multiple startup projects and for the action for **CaldovaAssetManagerStoreService** and **Caldova-Asset-Manager.Website**, choose **Start**.
 
 Browse the product categories and details of the site and notice the Functions getting executed.
 
@@ -2419,7 +2419,7 @@ Instead of configuring our web application to use the Function directly, in our 
 
 ### Task 6: Modify App Service CI/CD Task
 
-The solution file will now produce artifacts for the web application, **PartsUnlimitedWebsite.zip**, and one for the store, **PartsUnlimitedStoreService.zip**. Our current build task will fail since it can’t deploy multiple ZIP files to the service, therefore, we need to specify the correct file. Navigate to your Azure DevOps instance, to Releases, and modify the App Service deployment task to have the correct file.
+The solution file will now produce artifacts for the web application, **Caldova-Asset-Manager.Website.zip**, and one for the store, **CaldovaAssetManagerStoreService.zip**. Our current build task will fail since it can’t deploy multiple ZIP files to the service, therefore, we need to specify the correct file. Navigate to your Azure DevOps instance, to Releases, and modify the App Service deployment task to have the correct file.
 
 > ![Fix CI/CD release pipeline](./media/image250.png)
 
@@ -2427,7 +2427,7 @@ The solution file will now produce artifacts for the web application, **PartsUnl
 
 **Duration**: 45 minutes
 
-Now that Parts Unlimited has an API available, the business wants to start building relationships with other retailers, so they can sell their product through multiple channels. We’ve decided to use Azure API Management to expose and manage our
+Now that Caldova-Asset-Manager has an API available, the business wants to start building relationships with other retailers, so they can sell their product through multiple channels. We’ve decided to use Azure API Management to expose and manage our
 API.
 
 **References**

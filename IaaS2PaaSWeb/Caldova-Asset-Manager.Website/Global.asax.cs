@@ -1,0 +1,31 @@
+﻿using System;
+using System.Web;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+using Microsoft.Practices.Unity;
+using CaldovaAssetManager.Utils;
+using Unity.Mvc4;
+
+namespace CaldovaAssetManager
+{
+    public class Global : HttpApplication
+    {
+        internal static IUnityContainer UnityContainer;
+
+        protected void Application_Start(object sender, EventArgs e)
+        {
+            AreaRegistration.RegisterAllAreas();
+
+            SqlDatabaseConfiguration.Validate();
+
+            UnityContainer = UnityConfig.BuildContainer();
+            DependencyResolver.SetResolver(new UnityDependencyResolver(UnityContainer));
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+    }
+}

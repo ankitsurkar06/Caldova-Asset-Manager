@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Project | Caldova-Asset-Manager |
-| Module | PartsUnlimitedWebsite |
+| Module | Caldova-Asset-Manager.Website |
 | Migration Scope | Native Windows App Service hosting, one instance |
 | Integration Test Environment | mock |
 | Created At | 2026-10-27 |

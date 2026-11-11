@@ -48,10 +48,10 @@ $env:Path += ";C:\Program Files\Git\cmd"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #Restore NuGet packages
-& "C:\Source\AppWorkshop\IaaS2PaaSWeb\nuget.exe" restore C:\Source\AppWorkshop\IaaS2PaaSWeb\IaaS2PaaSWeb.sln
+& "C:\Source\Caldova-Asset-Manager\IaaS2PaaSWeb\nuget.exe" restore C:\Source\Caldova-Asset-Manager\IaaS2PaaSWeb\Caldova-Asset-Manager.sln
 
 #Build App using VS Tools
-msbuild C:\Source\AppWorkshop\IaaS2PaaSWeb\PartsUnlimitedWebsite\partsunlimitedwebsite.csproj /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:VisualStudioVersion=15.0
+msbuild C:\Source\Caldova-Asset-Manager\IaaS2PaaSWeb\Caldova-Asset-Manager.Website\Caldova-Asset-Manager.csproj /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:VisualStudioVersion=15.0
 
 ## Deploy Webapp
 
@@ -61,10 +61,10 @@ $SettingsFile += "<parameters>"
 $SettingsFile += "<setParameter name=""IIS Web Application Name"" value=""Default Web Site"" />"
 $SettingsFile += "<setParameter name=""DefaultConnectionString-Web.config Connection String"" value=""Server=" + $dbSrvUri + ";Database=" + $dbName + "; User Id=" + $dbUserName + "; password= " + $dbUserPassword + """/>"
 $SettingsFile += "</parameters>"
-Set-Content -Path C:\Source\AppWorkshop\IaaS2PaaSWeb\PartsUnlimitedWebsite\obj\Debug\Package\partsunlimitedwebsite.SetParameters.xml -Value $SettingsFile
+Set-Content -Path C:\Source\Caldova-Asset-Manager\IaaS2PaaSWeb\Caldova-Asset-Manager.Website\obj\Debug\Package\Caldova-Asset-Manager.SetParameters.xml -Value $SettingsFile
 
 #Deploy Website
-C:\Source\AppWorkshop\IaaS2PaaSWeb\PartsUnlimitedWebsite\obj\Debug\Package\partsunlimitedwebsite.deploy.cmd /Y /M:$webSrvUri/MSDeployAgentService /U:$adminUserName /P:$adminUserPassword
+C:\Source\Caldova-Asset-Manager\IaaS2PaaSWeb\Caldova-Asset-Manager.Website\obj\Debug\Package\Caldova-Asset-Manager.deploy.cmd /Y /M:$webSrvUri/MSDeployAgentService /U:$adminUserName /P:$adminUserPassword
 
 ## Install Chocolatey and packages
 Invoke-Expression ((New-Object Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')) 

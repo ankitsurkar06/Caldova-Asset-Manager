@@ -1,0 +1,20 @@
+{
+  "repos": [
+    {
+      "name": "Caldova-Asset-Manager",
+      "url": "https://github.com/ankitsurkar06/Caldova-Asset-Manager.git",
+      "branch": "main"
+    }
+  ],
+  "apps": [
+    {
+      "identifier": "asset-manager",
+      "description": "Asset Management",
+      "repos": ["Caldova-Asset-Manager"],
+      "output": {
+        "type": "local",
+        "path": "/path/to/reports/asset-manager"
+      }
+    }
+  ]
+}

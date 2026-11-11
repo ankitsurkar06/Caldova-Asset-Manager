@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -11,8 +11,7 @@
       "defaultValue":  "sysadmin"
     },
     "AdminUserPassword": {
-      "type": "securestring",
-      "defaultValue":  "Password$123"
+      "type": "securestring"
     },
     "DevWorkstationOSVersion": {
       "type": "string",
@@ -43,12 +42,11 @@
       "defaultValue": "workshopServiceAcc"
     },
     "dbUserPassword": {
-      "type": "securestring",
-      "defaultValue": "Password$123"
+      "type": "securestring"
     },
     "databaseName": {
       "type": "string",
-      "defaultValue": "partsUnlimitedDB"
+      "defaultValue": "CaldovaAssetManagerDB"
     },
     "dbUserDatabaseRole": {
       "type": "string",
@@ -56,15 +54,15 @@
     },
     "sqlSchemaScript": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/karlrissland/AppWorkshop/master/IaaS2PaaSWeb/PartsUnlimitedDatabase/Migrations/0001_20170912-1438_karlriss.sql"
+      "defaultValue": "https://raw.githubusercontent.com/ankitsurkar06/Caldova-Asset-Manager/main/IaaS2PaaSWeb/Caldova-Asset-Manager.Database/Migrations/0001_20170912-1438_karlriss.sql"
     },
     "sqlDataScript": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/karlrissland/AppWorkshop/master/IaaS2PaaSWeb/PartsUnlimitedDatabase/Post-Deployment/01_Finalize_Deployment.sql"
+      "defaultValue": "https://raw.githubusercontent.com/ankitsurkar06/Caldova-Asset-Manager/main/IaaS2PaaSWeb/Caldova-Asset-Manager.Database/Post-Deployment/01_Finalize_Deployment.sql"
     },
     "repoUri": {
       "type": "string",
-      "defaultValue": "https://github.com/karlrissland/AppWorkshop.git"
+      "defaultValue": "https://github.com/ankitsurkar06/Caldova-Asset-Manager.git"
     },
     "_artifactsLocation": {
       "type": "string",

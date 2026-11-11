@@ -1,6 +1,6 @@
 # Frozen App Service Hosting Baseline
 
-Module: PartsUnlimitedWebsite. Frozen: 2026-10-27. Mode: mock.
+Module: Caldova-Asset-Manager.Website. Frozen: 2026-10-27. Mode: mock.
 
 ## Scope and source anchoring
 

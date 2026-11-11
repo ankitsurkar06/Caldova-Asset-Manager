@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Authentication
+@model CaldovaAssetManager.Models.ExternalLoginListViewModel
+
+@{
+    var loginProviders = Model.AuthenticationSchemes;
+}
+
+<h4>Use another service to log in</h4>
+@if (loginProviders.Any())
+{
+    using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="socialLoginList">
+            @foreach (AuthenticationScheme p in loginProviders.Where(a => a.DisplayName != null))
+            {
+                <div>
+                    <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name" title="Log in using your @p.DisplayName account">@p.Name</button>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    <div>
+        <p>
+            There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
+            for details on setting up this ASP.NET application to support logging in via external services.
+        </p>
+    </div>
+}

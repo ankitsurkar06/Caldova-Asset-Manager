@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Scope revised by user: continue .NET 10 / ASP.NET Core webapp-only port; exclude SQL MI and pause separate Azure service migrations. No database project or SQL script changes, provisioning, deployment, containerization, integration suite or CVE remediation. Earlier task requirements below are retained for historical traceability; skipped tasks are not completed.",
+  "metadata": {
+    "planName": "Caldova Asset Manager assessment modernization",
+    "projectName": "Caldova-Asset-Manager",
+    "language": "dotnet",
+    "createdAt": "2026-10-23T21:09:14.115+05:30",
+    "version": "1.0"
+  },
+  "tasks": [
+    {
+      "type": "upgrade",
+      "id": "001-upgrade-dotnet",
+      "description": "Upgrade the application to .NET 10 LTS. Addresses issues: Old .NET Framework dependency detected.",
+      "reason": "The website targets unsupported .NET Framework 4.5.1 and cannot consume the required modern Azure integrations on that baseline.",
+      "requirements": "Upgrade the website to net10.0 with SDK-style project/build support and all necessary ASP.NET Core compatibility work. Replace incompatible System.Web, MVC/Web API, OWIN, Identity and classic SignalR integration while preserving routes, views, APIs, authorization, storefront/admin flows, identity identifiers/password-hash compatibility, cart behavior, database records and announcement contracts. Coordinate required ORM and provider compatibility without unnecessary schema changes or assuming legacy migrations automatically transfer. Preserve current disabled feature states. This is one upgrade task; execution uses the internal upgrade handler, not a named skill. No cloud deployment, new identity provider, integration suite or broad unrelated feature changes. Build and run applicable existing tests; explicitly report missing test coverage or compatibility blockers.",
+      "status": "started",
+      "dependencies": [],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Webapp-only SDK-style net10.0 / ASP.NET Core port implemented. Clean Release build and publish pass; published framework minimum is 10.0.13. Razor compilation, local health/static delivery, protected-route login redirects and Core SignalR negotiation verified. 80 offline legacy-schema/query/password assertions pass. Historical configuration is archived outside publish output. No database project or SQL script changed and no SQL MI-only behavior remains in the active runtime. Live database user journeys, external providers and account delivery require environment acceptance; task remains started, not production-certified.",
+      "successCriteriaStatus": {
+        "passBuild": "true"
+      }
+    },
+    {
+      "type": "transform",
+      "id": "002-transform-sqlclient",
+      "description": "Replace the legacy SQL client with Microsoft.Data.SqlClient. Addresses issues: System.Data.SqlClient dependency detected.",
+      "requirements": "Assessment solution: sqlclient-system-to-microsoft (guidance identifier only, not a skill). Migrate active SQL client dependencies and align all remaining connection/provider and ORM configuration with Microsoft.Data.SqlClient. Preserve queries, transactions, mappings and named connection semantics. Do not perform a namespace-only replacement that leaves EF provider incompatibilities. Account for the ORM chosen by the runtime task. Verify the build and focused provider/configuration checks without requiring live Azure infrastructure.",
+      "skills": [],
+      "status": "skipped",
+      "dependencies": [
+        "001-upgrade-dotnet"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    },
+    {
+      "type": "transform",
+      "id": "003-transform-sql-managed-instance",
+      "description": "Migrate SQL Server access to managed-identity-based Azure SQL Managed Instance. Addresses issues: SQL database connection detected. Execution 2026-10-23: feasible MI configuration/authentication/TLS and runtime no-create/no-seed changes implemented on actual net472/EF6 runtime; local builds and focused offline checks passed. Overall acceptance remains pending because upstream .NET 10 task 001 is blocked and no live MI validation/data migration has been performed. Evidence: ../003-summary.md and ../003-progress.md. No resources provisioned or code committed.",
+      "requirements": "Use Azure SQL Managed Instance, explicitly overriding local-sql-server-to-azure-sql-db in the saved assessment selection. Selected guidance identifier: local-sql-server-to-azure-sql-mi. Replace production LocalDB/integrated-Windows connectivity with externally configured Managed Instance access using managed identity and encrypted transport. Preserve application and Identity data, connection-name behavior, schema/query semantics and transactions. Separate runtime access from controlled schema/data deployment; do not depend on creating/seeding a production database at web startup. Document externally managed identity/database-user permissions, connectivity and schema/data migration prerequisites. Do not provision resources or execute data migration against an unspecified database. Validate provider/configuration behavior locally and clearly distinguish it from unperformed real SQL connectivity verification.",
+      "skills": [
+        {
+          "name": "migration-azure-sql-database",
+          "location": "builtin"
+        }
+      ],
+      "status": "skipped",
+      "dependencies": [
+        "002-transform-sqlclient"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Explicitly excluded by user. Historical MI helper/configuration files are preserved but excluded from the net10.0 webapp. SQL connection selection is host-configurable, not MI-only. No database project, SQL script, schema or data migration performed by the webapp port."
+    },
+    {
+      "type": "transform",
+      "id": "004-transform-static-assets-blob",
+      "description": "Migrate identified local static content to Azure Blob Storage. Addresses issues: Static content detected.",
+      "requirements": "Selected assessment solution: local-file-to-azure-blob-storage; Azure Files is not selected. Cover assessed images, scripts, styles, fonts and their references in views, layouts, bundles, CSS and configuration. Do not move executable views or application code to Blob Storage. Preserve appearance, content types, relative-resource resolution and existing asset visibility. Use managed identity for authenticated application/storage operations; keep credentials and tokens out of browser output. Select a browser-delivery approach that does not accidentally expose private assets or require browser managed identity. Document external asset-copy and storage-access prerequisites; do not provision or populate unspecified Azure resources. Build and check affected asset references locally; live Blob delivery is not claimed.",
+      "skills": [
+        {
+          "name": "migration-azure-storage-blob",
+          "location": "builtin"
+        }
+      ],
+      "status": "skipped",
+      "dependencies": [
+        "003-transform-sql-managed-instance"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    },
+    {
+      "type": "transform",
+      "id": "005-transform-credentials-keyvault",
+      "description": "Remove embedded credentials and protect remaining secrets with managed identity and Azure Key Vault. Addresses issues: Connection strings without configuration builders detected; Hardcoded sensitive data detected.",
+      "requirements": "Selected assessment solution: plaintext-credential-to-azure-keyvault. Remove actual embedded credentials, including administrator bootstrap password configuration; never reproduce values in logs, docs or outputs. Prefer secretless managed-identity SQL/storage access rather than relocating unnecessary passwords. Protect remaining required provider/API secrets through Key Vault and managed identity, using configuration appropriate to the upgraded runtime rather than mechanically adding legacy configuration builders. Preserve existing user sign-in and authorization; empty optional provider placeholders, password property names and validation labels are not leaked secrets. Require external rotation of previously embedded credentials and document safe administrator bootstrap requirements. Fail visibly on missing required settings without exposing secrets. No resource provisioning, sign-in-provider migration, general security audit or CVE scan. Build and check changed configuration paths without live Key Vault assertions.",
+      "skills": [
+        {
+          "name": "migration-azure-keyvault-secret",
+          "location": "builtin"
+        }
+      ],
+      "status": "skipped",
+      "dependencies": [
+        "004-transform-static-assets-blob"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    },
+    {
+      "type": "transform",
+      "id": "006-transform-real-time",
+      "description": "Preserve real-time announcement behavior on the modernized runtime. Addresses issues: Potential duplex communication is detected. Execution 2026-10-23: feasible announcement-specific net472 compatibility adjustments implemented: mapped/global SignalR resolver shared, public product URL clears ambient Admin area, Title/Url JSON names pinned, dormant browser anchor reference corrected without enabling UI. Debug/Release website rebuilds and 42 compiled offline announcement assertions plus 13 browser/reference assertions passed. Overall acceptance remains pending: task001 ASP.NET Core/.NET10 port is missing, task004 remains blocked, mandatory MCP tools lack callable definitions and no hosted transport/live browser verification was performed. Evidence: ../006-summary.md and ../006-progress.md. No resources provisioned, branch changes or commits.",
+      "requirements": "Assessment solution: real-time-communication-prompt (guidance identifier only, not a skill). Build on server/client SignalR compatibility performed by the runtime task. Check AnnouncementHub naming, administrator product broadcasts, payload Title/Url semantics, authorization, connection routing and every affected browser reference. Preserve existing enabled/disabled states; do not enable commented-out UI integrations merely because scanning found them. Make remaining changes needed to retain observed announcement behavior. Do not add Azure SignalR, another messaging service or a scale-out requirement without explicit approval. Build and use focused local contract checks; no integration suite or cloud messaging verification.",
+      "skills": [],
+      "status": "skipped",
+      "dependencies": [
+        "005-transform-credentials-keyvault"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Separate assessment task paused under webapp-only scope. Necessary server-side Core SignalR port is included in runtime task 001 and negotiation passes. Optional browser UI remains disabled as before; no cloud messaging service added."
+    },
+    {
+      "type": "transform",
+      "id": "007-transform-redis-cache",
+      "description": "Migrate process-local product caching to Azure Redis caching. Addresses issues: Data caching is detected.",
+      "requirements": "Selected assessment solution: local-cache-to-azure-redis-cache. Cover home top-selling/new-arrival lists, store product details, administrator editing/invalidation and latest-product layout data. Preserve cache keys and logical values, ten-minute absolute versus sliding expiry semantics, cache-miss behavior and all existing invalidation paths. Serialize safe data without persisting live ORM contexts/proxies. Authenticate with managed identity and external endpoint configuration. Document explicit and observable handling of cache outages; do not silently hide integration failures. Verify target Redis service/SKU availability during external resource selection rather than provisioning a retired offering. No session redesign, new caching features, infrastructure provisioning or live Redis certification. Build and check affected expiry/invalidation paths locally.",
+      "skills": [
+        {
+          "name": "migration-azure-redis-cache",
+          "location": "builtin"
+        }
+      ],
+      "status": "skipped",
+      "dependencies": [
+        "006-transform-real-time"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    },
+    {
+      "type": "transform",
+      "id": "008-transform-configuration",
+      "description": "Externalize the executable recommendation endpoint configuration. Addresses issues: Hardcoded URLs detected.",
+      "requirements": "Assessment solution: configuration-management-prompt (guidance identifier only, not a skill). Externalize the recommendation scoring endpoint and integrate it with configuration appropriate to the upgraded runtime and the existing model-name/feature settings. Preserve request construction, feature toggles and environment override behavior. Validate required values explicitly. Do not treat documentation/comment URLs as runtime dependencies. Keep secrets in the credential migration path. Do not add Azure App Configuration, other configuration services, provisioning or deployment. Build and check endpoint binding, override behavior and URL construction locally.",
+      "skills": [],
+      "status": "skipped",
+      "dependencies": [
+        "007-transform-redis-cache"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    },
+    {
+      "type": "transform",
+      "id": "009-transform-http",
+      "description": "Modernize external HTTP communication while preserving recommendation behavior. Addresses issues: Access to external resources via HTTP is detected.",
+      "requirements": "Assessment solution: http-communication-prompt (guidance identifier only, not a skill). Align IHttpClient/HttpClientWrapper and the recommendation engine with the supported runtime. Consume the externalized endpoint and secured credentials, preserve the existing request/response and feature-toggle contracts, and handle transport lifetime, HTTPS, timeouts and cancellation appropriately. Preserve legitimate empty recommendations while distinguishing unavailable endpoints, authentication failures and invalid responses through explicit telemetry/errors without logging secrets. Do not silently report remote failure as successful empty recommendations. Verify the legacy service contract and availability during execution; if unavailable, record a blocker and request user input rather than inventing a new recommendation service. Build and perform focused local response/error-path checks only. No new integration suite or live endpoint acceptance claim.",
+      "skills": [],
+      "status": "skipped",
+      "dependencies": [
+        "008-transform-configuration"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      },
+      "taskSummary": "Not executed as a separate migration under the user-confirmed webapp-only scope. Historical source changes are not represented as completed or live-validated. Runtime compatibility changes are tracked under task 001."
+    }
+  ]
+}

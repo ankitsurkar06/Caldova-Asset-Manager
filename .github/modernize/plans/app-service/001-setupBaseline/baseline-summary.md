@@ -7,12 +7,12 @@ directory. Build output and user-specific project files were excluded.
 Command:
 
 ```powershell
-dotnet build .\IaaS2PaaSWeb\PartsUnlimitedWebsite\Caldova-Asset-Manager.csproj -c Release --no-restore
+dotnet build .\IaaS2PaaSWeb\Caldova-Asset-Manager.Website\Caldova-Asset-Manager.csproj -c Release --no-restore
 ```
 
 Result: passed, zero warnings and zero errors.
 
-Only PartsUnlimitedWebsite is in scope. The SQL database project and workshop
+Only Caldova-Asset-Manager.Website is in scope. The SQL database project and workshop
 deployment project are out of scope; neither is modified or built for hosting
 readiness. No existing test projects or executable integration tests were found.
 New tests use the conventional .NET `tests/` layout, xUnit, and
