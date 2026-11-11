@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assessment - PartsUnlimitedWebsite</title>
+<style>
+:root {
+  --bg-primary: #ffffff;
+  --bg-card: #f8f9fa;
+  --bg-page: #f0f1f3;
+  --text-primary: #24292f;
+  --text-secondary: #57606a;
+  --text-muted: #6b7280;
+  --border-color: #d0d7de;
+  --border-light: #e1e4e8;
+  --link-color: #2563eb;
+  --color-mandatory: #E3008C;
+  --color-potential: #637CEF;
+  --color-optional: #A19F9D;
+  --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-mono: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-family); font-size: 13px; color: var(--text-primary); background: var(--bg-primary); line-height: 1.5; margin: 0; padding: 0; }
+a { color: var(--link-color); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Page layout ───────────────────────────────────────────── */
+.main { margin: 0; padding: 24px 32px; background: var(--bg-primary); }
+.back-link { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; display: block; }
+h1 { font-weight: 600; font-size: 20px; color: var(--text-primary); margin-bottom: 20px; }
+
+/* ── Report cards (matches VS Code .vscode-report-card) ──── */
+.report-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 4px; padding: 12px; margin-bottom: 20px; }
+.report-card h2 { font-size: 14px; font-weight: 600; margin: 0; color: var(--text-primary); }
+.report-card-body { margin-top: 16px; }
+
+/* ── Component Information (two-column) ────────────────── */
+.app-info-container { display: flex; gap: 8px; flex-wrap: wrap; }
+.app-info-column { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 8px; }
+.app-info-row { display: flex; align-items: baseline; }
+.app-info-label { width: 136px; flex-shrink: 0; font-weight: 600; color: var(--text-primary); }
+.app-info-value { flex: 1; color: var(--text-primary); }
+
+/* ── Issue Summary (pie charts + legend) ─────────────────── */
+.cards-container { display: flex; align-items: stretch; gap: 20px; flex-wrap: wrap; }
+.issue-summary-card { flex: 2; }
+.domain-summary-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; }
+.domain-summary-item { flex: 1; min-width: 120px; text-align: center; padding: 0 16px; border-right: 1px solid var(--border-light); }
+.domain-summary-item:last-child { border-right: none; }
+.domain-summary-item h3 { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 8px; }
+.domain-summary-item .count { font-size: 12px; color: var(--text-secondary); }
+.criticality-legend { display: flex; flex-wrap: wrap; gap: 15px; padding-top: 12px; justify-content: center; }
+.criticality-legend .legend-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary); }
+.legend-swatch { display: inline-block; width: 1em; height: 1em; border-radius: 2px; }
+
+/* ── Issue list tables ───────────────────────────────────── */
+.issue-section { margin-top: 20px; }
+.issue-section h2 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.issue-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 600px; }
+.issue-table th { text-align: left; text-transform: uppercase; font-weight: 600; font-size: calc(13px * 0.875); padding: 6px 8px; background: var(--bg-card); border-bottom: 1px solid var(--border-color); color: var(--text-secondary); position: sticky; top: 0; z-index: 1; }
+.issue-table td { padding: 12px 8px; border-bottom: 1px solid var(--border-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+.col-issue { width: 55%; }
+.col-criticality { width: 25%; }
+.col-storypoint { width: 20%; }
+
+/* ── Target dropdown ─────────────────────────────────────── */
+.target-select-container { margin: 4px 0 16px 0; display: flex; align-items: center; gap: 8px; }
+.target-select-container label { font-weight: 600; color: var(--text-primary); font-size: 14px; }
+.target-select-container select { font-family: var(--font-family); font-size: 13px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); cursor: pointer; }
+
+/* ── Filter bar ──────────────────────────────────────────── */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0 8px 0; align-items: center; }
+.multi-select { position: relative; display: inline-block; min-width: 140px; }
+.multi-select-btn { font-family: var(--font-family); font-size: 13px; padding: 4px 24px 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-primary); color: var(--text-primary); cursor: pointer; width: 100%; text-align: left; position: relative; white-space: nowrap; }
+.multi-select-btn::after { content: '\25BE'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-secondary); }
+.multi-select-dropdown { display: none; position: absolute; top: 100%; left: 0; min-width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; margin-top: 2px; }
+.multi-select.open .multi-select-dropdown { display: block; }
+.multi-select-option { display: flex; align-items: center; gap: 6px; padding: 5px 10px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+.multi-select-option:hover { background: var(--bg-secondary); }
+.multi-select-option input[type=checkbox] { margin: 0; cursor: pointer; }
+.clear-filters { font-size: 12px; color: var(--link-color); cursor: pointer; margin-left: 4px; }
+
+/* ── Criticality labels (colored square + text) ──────────── */
+.crit-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; }
+.crit-square { display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.crit-square-mandatory { background: var(--color-mandatory); }
+.crit-square-potential { background: var(--color-potential); }
+.crit-square-optional { background: var(--color-optional); }
+
+/* ── Expandable rows ─────────────────────────────────────── */
+.expand-btn { background: none; border: none; cursor: pointer; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 11px; transition: transform 0.15s; padding: 0; vertical-align: middle; flex-shrink: 0; }
+.expand-btn.open { transform: rotate(90deg); }
+.issue-title-cell { display: flex; align-items: center; gap: 4px; }
+.detail-row td { padding: 0; border-bottom: 1px solid var(--border-light); white-space: normal; overflow: visible; text-overflow: clip; }
+.detail-content { display: flex; gap: 0; padding: 8px 8px 8px 32px; min-width: 0; }
+.file-list { flex: 0 0 50%; min-width: 0; overflow: hidden; }
+.file-list table { width: 100%; border-collapse: collapse; }
+.file-list th { font-size: calc(13px * 0.875); text-transform: uppercase; font-weight: 600; color: var(--text-secondary); padding: 6px 8px; border-bottom: 1px solid var(--border-color); text-align: left; height: 32px; }
+.file-list td { font-size: 13px; padding: 6px 8px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
+.file-list .file-path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; display: block; }
+.file-list .position { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+.explanation-panel { flex: 1; padding-left: 16px; min-width: 0; overflow-wrap: break-word; word-wrap: break-word; }
+.explanation-panel h4 { font-size: calc(13px * 0.875); text-transform: uppercase; font-weight: 600; color: var(--text-secondary); padding: 6px 0; border-bottom: 1px solid var(--border-color); height: 32px; margin: 0; }
+.explanation-panel p { font-size: 13px; padding: 8px 0; color: var(--text-primary); line-height: 1.6; white-space: normal; word-break: break-word; }
+
+/* ── Experimental badge ──────────────────────────────────── */
+.badge-experimental { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #fef9c3; color: #854d0e; vertical-align: middle; margin-left: 8px; cursor: default; }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer { text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 13px; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .main { padding: 16px; }
+  .app-info-container { flex-direction: column; }
+  .domain-summary-container { flex-direction: column; }
+  .domain-summary-item { border-right: none; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; }
+  .detail-content { flex-direction: column; }
+  .file-list { flex: none; width: 100%; }
+  .explanation-panel { padding-left: 0; padding-top: 8px; }
+}
+/* ── Tab navigation ──────────────────────────────────────── */
+.tab-nav { display: flex; gap: 0; border-bottom: 1px solid var(--border-color); margin-bottom: 28px; flex-wrap: wrap; }
+.tab-btn { background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 18px; font-size: 13px; font-family: var(--font-family); color: var(--text-secondary); cursor: pointer; margin-bottom: -1px; white-space: nowrap; position: relative; }
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--link-color); border-bottom-color: var(--link-color); font-weight: 600; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Tooltip on tab ──────────────────────────────────────── */
+.tab-btn[data-tooltip]::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #24292f; color: #ffffff; font-size: 12px; font-weight: 400; padding: 6px 10px; border-radius: 4px; white-space: normal; width: max-content; max-width: 260px; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100; }
+.tab-btn[data-tooltip]:hover::after { opacity: 1; }
+
+/* ── Fact content — prose column ─────────────────────────── */
+.fact-content { max-width: 860px; margin: 0 auto; line-height: 1.75; color: var(--text-primary); font-size: 14px; }
+.fact-content h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; color: var(--text-primary); letter-spacing: -0.01em; }
+.fact-content h1 + p { margin-top: 6px; color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+.fact-content h2 { font-size: 17px; font-weight: 700; margin: 36px 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); letter-spacing: -0.01em; }
+.fact-content h3 { font-size: 14px; font-weight: 700; margin: 24px 0 8px 0; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.04em; font-size: 12px; color: var(--text-secondary); }
+.fact-content p { margin: 10px 0; color: var(--text-primary); }
+.fact-content ul, .fact-content ol { margin: 10px 0 10px 22px; }
+.fact-content li { margin: 5px 0; }
+.fact-content a { color: var(--link-color); }
+.fact-content a:hover { text-decoration: underline; }
+
+/* ── Fact tables ─────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+.fact-content table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 13px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+.fact-content thead { background: var(--bg-card); }
+.fact-content th { text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
+.fact-content td { padding: 9px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; color: var(--text-primary); }
+.fact-content tr:last-child td { border-bottom: none; }
+.fact-content tbody tr:hover { background: #f6f8fa; }
+
+/* ── Fact code ───────────────────────────────────────────── */
+.fact-content code { font-family: var(--font-mono); font-size: 12px; background: #f0f1f3; padding: 2px 6px; border-radius: 4px; color: #c7254e; }
+.fact-content pre { background: #f6f8fa; border: 1px solid var(--border-light); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 14px 0; }
+.fact-content pre code { background: none; color: var(--text-primary); padding: 0; border-radius: 0; }
+.fact-content hr { border: none; border-top: 1px solid var(--border-light); margin: 28px 0; }
+.fact-content strong { font-weight: 600; }
+.fact-content em { font-style: italic; }
+.fact-content blockquote { border-left: 3px solid var(--border-color); margin: 12px 0; padding: 4px 16px; color: var(--text-secondary); }
+.fact-unavailable { padding: 32px 0; }
+.fact-unavailable h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); text-transform: none; letter-spacing: 0; margin: 0 0 12px 0; }
+.fact-unavailable p { margin: 0 0 8px 0; color: var(--text-secondary); }
+.fact-unavailable ol, .fact-unavailable ul { margin: 0 0 0 22px; color: var(--text-primary); }
+.fact-unavailable li { margin: 6px 0; }
+
+/* ── Mermaid diagram card ─────────────────────────────────── */
+.mermaid { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; padding: 24px 16px; margin: 20px 0; overflow-x: auto; text-align: center; cursor: pointer; position: relative; }
+.mermaid:hover { border-color: var(--border-color); }
+.mermaid svg { max-width: 100%; height: auto !important; display: inline-block; }
+.mermaid-zoom-hint { position: absolute; top: 8px; right: 10px; font-size: 11px; color: var(--text-muted); opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+.mermaid:hover .mermaid-zoom-hint { opacity: 1; }
+
+/* ── Diagram lightbox ────────────────────────────────────── */
+.diagram-lightbox { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); align-items: center; justify-content: center; cursor: zoom-out; padding: 48px 32px; }
+.diagram-lightbox.open { display: flex; }
+.diagram-lightbox-inner { background: #ffffff; border-radius: 10px; padding: 32px; width: 88vw; max-height: 88vh; overflow: hidden; cursor: default; box-shadow: 0 24px 64px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; }
+.diagram-lightbox-inner svg { width: 100% !important; height: auto !important; max-height: 76vh; display: block; }
+.diagram-lightbox-close { position: fixed; top: 20px; right: 24px; background: #ffffff; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001; }
+.diagram-lightbox-close:hover { background: var(--bg-card); }
+.diagram-lightbox-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.55); color: #ffffff; font-size: 12px; padding: 6px 14px; border-radius: 20px; pointer-events: none; white-space: nowrap; z-index: 1001; }
+</style>
+<script>
+window.__mermaidPending = [];
+window.__mermaidReady = false;
+window.__renderMermaidIn = function(container) {
+  if (container) { window.__mermaidPending.push(container); }
+};
+</script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: false, theme: 'default', flowchart: { useMaxWidth: true }, sequence: { useMaxWidth: true } });
+
+window.__renderMermaidIn = function(container) {
+  var nodes = container ? container.querySelectorAll('.mermaid:not([data-processed])') : [];
+  if (nodes.length > 0) {
+    mermaid.run({ nodes: Array.from(nodes) }).then(function() {
+      nodes.forEach(function(node) {
+        if (!node.querySelector('.mermaid-zoom-hint')) {
+          var hint = document.createElement('span');
+          hint.className = 'mermaid-zoom-hint';
+          hint.textContent = 'Click to expand';
+          node.appendChild(hint);
+        }
+      });
+    });
+  }
+};
+
+var drained = new Set();
+(window.__mermaidPending || []).forEach(function(c) {
+  if (!drained.has(c)) { drained.add(c); window.__renderMermaidIn(c); }
+});
+window.__mermaidPending = [];
+window.__mermaidReady = true;
+
+function renderActivePanels() {
+  document.querySelectorAll('.tab-panel.active').forEach(function(p) {
+    if (!drained.has(p)) { drained.add(p); window.__renderMermaidIn(p); }
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderActivePanels);
+} else {
+  renderActivePanels();
+}
+</script>
+</head><body>
+<div id="diagram-lightbox" class="diagram-lightbox" role="dialog" aria-modal="true">
+  <button class="diagram-lightbox-close" id="diagram-lightbox-close" aria-label="Close">&#x2715;</button>
+  <div class="diagram-lightbox-hint">Scroll to zoom &nbsp;&middot;&nbsp; Drag to pan &nbsp;&middot;&nbsp; Double-click to reset</div>
+  <div class="diagram-lightbox-inner" id="diagram-lightbox-inner"></div>
+</div>
+<div class="main">
+<h1>PartsUnlimitedWebsite</h1>
+<div class="report-card">
+  <h2>Component Information</h2>
+  <div class="report-card-body">
+    <div class="app-info-container">
+      <div class="app-info-column">
+        <div class="app-info-row"><span class="app-info-label">Component Name</span><span class="app-info-value">PartsUnlimitedWebsite</span></div>
+        <div class="app-info-row"><span class="app-info-label">Effort</span><span class="app-info-value" id="effort-display">M (total story points: 23)</span></div>
+      </div>
+      <div class="app-info-column">
+        <div class="app-info-row"><span class="app-info-label">Build Tools</span><span class="app-info-value">MSBuild, NuGet</span></div>
+        <div class="app-info-row"><span class="app-info-label">Frameworks</span><span class="app-info-value">ASP.NET MVC 5, ASP.NET Web API 2</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="tab-issues" data-tooltip="Issues detected in the source code">Issues</button>
+  <button class="tab-btn" data-tab="tab-arch" data-tooltip="How the app&#x27;s layers connect — from UI to data.">Architecture</button>
+  <button class="tab-btn" data-tab="tab-api" data-tooltip="Endpoints exposed by this app and how services communicate.">API Contracts</button>
+  <button class="tab-btn" data-tab="tab-config" data-tooltip="Environment settings, runtime profiles, and deployment manifests.">Configuration</button>
+  <button class="tab-btn" data-tab="tab-workflows" data-tooltip="Domain entities and the core flows users move through.">Business Workflows</button>
+  <button class="tab-btn" data-tab="tab-deps" data-tooltip="Libraries and frameworks this app depends on, grouped by category.">Dependencies</button>
+  <button class="tab-btn" data-tab="tab-data" data-tooltip="Database schema, entity relationships, and persistence behavior.">Data Model</button>
+</nav>
+<div id="tab-issues" class="tab-panel active">
+<div class="report-card">
+  <h2>Issue Summary</h2>
+  <div class="report-card-body">
+    <div class="domain-summary-container" id="donut-container">
+      <div class="domain-summary-item">
+<svg viewBox="0 0 100 100" width="100" height="100" style="display:block;margin:0 auto;transform:rotate(-90deg);">
+  <circle cx="50" cy="50" r="35" fill="none" stroke="var(--color-mandatory)" stroke-width="15" stroke-dasharray="120.67 219.91" stroke-dashoffset="-0.00"/>
+  <circle cx="50" cy="50" r="35" fill="none" stroke="var(--color-potential)" stroke-width="15" stroke-dasharray="47.37 219.91" stroke-dashoffset="-122.17"/>
+  <circle cx="50" cy="50" r="35" fill="none" stroke="var(--color-optional)" stroke-width="15" stroke-dasharray="47.37 219.91" stroke-dashoffset="-171.04"/>
+</svg>
+
+        <h3>Security</h3>
+        <div class="count">9 issues</div>
+      </div>
+    </div>
+    <div class="criticality-legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--color-mandatory)"></span>Mandatory</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--color-potential)"></span>Potential</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--color-optional)"></span>Optional</div>
+    </div>
+  </div>
+</div>
+<div class="filter-bar" id="filter-bar">
+  <div class="multi-select" id="criticality-ms">
+    <button class="multi-select-btn" onclick="toggleMultiSelect('criticality-ms')">Criticality</button>
+    <div class="multi-select-dropdown">
+      <label class="multi-select-option"><input type="checkbox" value="mandatory" onchange="onMultiSelectChange('criticality-ms','Criticality')"/> Mandatory</label>
+      <label class="multi-select-option"><input type="checkbox" value="potential" onchange="onMultiSelectChange('criticality-ms','Criticality')"/> Potential</label>
+      <label class="multi-select-option"><input type="checkbox" value="optional" onchange="onMultiSelectChange('criticality-ms','Criticality')"/> Optional</label>
+    </div>
+  </div>
+  <a class="clear-filters" href="javascript:void(0)" onclick="clearAllFilters()">Clear all</a>
+</div>
+<div class="issue-section" data-domain="security">
+  <h2>Security <span class="badge-experimental" title="These issues were generated by AI and may contain inaccuracies or incomplete information. Please review carefully.">Experimental</span></h2>
+  <table class="issue-table">
+    <colgroup><col class="col-issue"/><col class="col-criticality"/><col class="col-storypoint"/></colgroup>
+    <thead><tr><th>Issue Category</th><th>Criticality</th><th>Story Point</th></tr></thead>
+    <tbody>
+    <tr class="issue-row" data-criticality="mandatory" onclick="toggleRow('row-security-0', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-0">&#x276F;</button> CVE-2023-33170: Microsoft Security Advisory CVE-2023-33170: .NET Security Feature Bypass Vulnerability</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-mandatory"></span>Mandatory</span></td>
+      <td class="sp-cell">1</td>
+    </tr>
+    <tr class="detail-row" id="row-security-0" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p><a href="https://github.com/advisories/GHSA-25c8-p796-jg6r" target="_blank" rel="noopener noreferrer">CVE-2023-33170</a>: Microsoft Security Advisory CVE-2023-33170: .NET Security Feature Bypass Vulnerability</p><p>Severity: HIGH</p><p>Affected dependencies:<br/>  - Microsoft.AspNet.Identity.Owin 2.2.1 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:12; vulnerable range &lt; 2.2.4; first patched version 2.2.4)</p><p>Recommended fix:<br/>  - Upgrade to the first patched version or a later supported version.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="mandatory" onclick="toggleRow('row-security-1', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-1">&#x276F;</button> CVE-2022-29117: .NET Denial of Service Vulnerability</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-mandatory"></span>Mandatory</span></td>
+      <td class="sp-cell">1</td>
+    </tr>
+    <tr class="detail-row" id="row-security-1" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28</span></td></tr>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p><a href="https://github.com/advisories/GHSA-3rq8-h3gj-r5c6" target="_blank" rel="noopener noreferrer">CVE-2022-29117</a>: .NET Denial of Service Vulnerability</p><p>Severity: HIGH</p><p>Affected dependencies:<br/>  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range &lt; 4.2.2; first patched version 4.2.2)<br/>  - Microsoft.Owin.Security.Cookies 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:31; vulnerable range &lt; 4.2.2; first patched version 4.2.2)</p><p>Recommended fix:<br/>  - Upgrade to the first patched version or a later supported version.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="mandatory" onclick="toggleRow('row-security-2', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-2">&#x276F;</button> CVE-2020-1045: Cookie parsing failure</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-mandatory"></span>Mandatory</span></td>
+      <td class="sp-cell">1</td>
+    </tr>
+    <tr class="detail-row" id="row-security-2" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p><a href="https://github.com/advisories/GHSA-hxrm-9w7p-39cc" target="_blank" rel="noopener noreferrer">CVE-2020-1045</a>: Cookie parsing failure</p><p>Severity: HIGH</p><p>Affected dependencies:<br/>  - Microsoft.Owin 3.1.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:28; vulnerable range &lt; 4.1.1; first patched version 4.1.1)</p><p>Recommended fix:<br/>  - Upgrade to the first patched version or a later supported version.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="mandatory" onclick="toggleRow('row-security-3', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-3">&#x276F;</button> CVE-2021-21252: Regular Expression Denial of Service in jquery-validation</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-mandatory"></span>Mandatory</span></td>
+      <td class="sp-cell">1</td>
+    </tr>
+    <tr class="detail-row" id="row-security-3" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p><a href="https://github.com/advisories/GHSA-jxwx-85vp-gvwm" target="_blank" rel="noopener noreferrer">CVE-2021-21252</a>: Regular Expression Denial of Service in jquery-validation</p><p>Severity: HIGH</p><p>Affected dependencies:<br/>  - jQuery.Validation 1.16.0 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:9; vulnerable range &lt; 1.19.3; first patched version 1.19.3)</p><p>Recommended fix:<br/>  - Upgrade to the first patched version or a later supported version.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="mandatory" onclick="toggleRow('row-security-4', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-4">&#x276F;</button> CVE-2024-21907: Improper Handling of Exceptional Conditions in Newtonsoft.Json</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-mandatory"></span>Mandatory</span></td>
+      <td class="sp-cell">1</td>
+    </tr>
+    <tr class="detail-row" id="row-security-4" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39">IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p><a href="https://github.com/advisories/GHSA-5crp-9r3c-p9vr" target="_blank" rel="noopener noreferrer">CVE-2024-21907</a>: Improper Handling of Exceptional Conditions in Newtonsoft.Json</p><p>Severity: HIGH</p><p>Affected dependencies:<br/>  - Newtonsoft.Json 10.0.3 (declared at IaaS2PaaSWeb/PartsUnlimitedWebsite/packages.config:39; vulnerable range &lt; 13.0.1; first patched version 13.0.1)</p><p>Recommended fix:<br/>  - Upgrade to the first patched version or a later supported version.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="potential" onclick="toggleRow('row-security-5', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-5">&#x276F;</button> CWE-1057: Data Access Operations Outside of Expected Data Manager Component</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-potential"></span>Potential</span></td>
+      <td class="sp-cell">5</td>
+    </tr>
+    <tr class="detail-row" id="row-security-5" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs">IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p>The product uses a dedicated, central data manager component as required by design, but it contains code that performs data-access operations that do not use this data manager.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="potential" onclick="toggleRow('row-security-6', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-6">&#x276F;</button> CWE-778: Insufficient Logging</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-potential"></span>Potential</span></td>
+      <td class="sp-cell">3</td>
+    </tr>
+    <tr class="detail-row" id="row-security-6" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/AccountController.cs">IaaS2PaaSWeb/PartsUnlimitedWebsite/Controllers/AccountController.cs</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p>When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="optional" onclick="toggleRow('row-security-7', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-7">&#x276F;</button> CWE-259: Use of Hard-coded Password</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-optional"></span>Optional</span></td>
+      <td class="sp-cell">5</td>
+    </tr>
+    <tr class="detail-row" id="row-security-7" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config">IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config</span></td></tr>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs">IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p>The product contains a hard-coded password, which it uses for its own inbound authentication or for outbound communication to external components.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="issue-row" data-criticality="optional" onclick="toggleRow('row-security-8', this)" style="cursor:pointer;">
+      <td style="white-space:normal;"><div class="issue-title-cell"><button class="expand-btn" id="btn-row-security-8">&#x276F;</button> CWE-798: Use of Hard-coded Credentials</div></td>
+      <td class="crit-cell"><span class="crit-label"><span class="crit-square crit-square-optional"></span>Optional</span></td>
+      <td class="sp-cell">5</td>
+    </tr>
+    <tr class="detail-row" id="row-security-8" style="display:none;">
+      <td colspan="3">
+        <div class="detail-content">
+          <div class="file-list">
+            <table><thead><tr><th>File</th></tr></thead><tbody>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config">IaaS2PaaSWeb/PartsUnlimitedWebsite/Web.config</span></td></tr>
+            <tr><td><span class="file-path" title="IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs">IaaS2PaaSWeb/PartsUnlimitedWebsite/App_Start/Startup.Auth.cs</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="explanation-panel">
+            <h4>Explanation</h4>
+            <div><p>The product contains hard-coded credentials, such as a password or cryptographic key.</p></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div><!-- #tab-issues -->
+<div id="tab-arch" class="tab-panel">
+  <div class="fact-content"><h1 id="architecture-diagram">Architecture Diagram</h1>
+<p>PartsUnlimited is a single ASP.NET web application with server-rendered storefront pages, a small Web API surface, and a shared Entity Framework data context. Business services and external integrations run in-process with the web application.</p>
+<h2 id="application-architecture">Application Architecture</h2>
+<div class="mermaid">
+flowchart TD
+    subgraph Client["Client Layer"]
+        Browser["Web Browser"]
+    end
+    subgraph Web["Web Application"]
+        MVC["ASP.NET MVC 5 Controllers and Razor Views"]
+        API["ASP.NET Web API 2 Controllers"]
+        Hub["SignalR Hub"]
+        Auth["ASP.NET Identity and OWIN"]
+    end
+    subgraph Business["Business Components"]
+        Queries["Order and Raincheck Queries"]
+        Cart["Shopping Cart and Checkout"]
+        Catalog["Catalog, Search, and Admin Logic"]
+        Recommendations["Recommendation Engine"]
+        Tax["Shipping and Tax Calculator"]
+    end
+    subgraph Persistence["Persistence Layer"]
+        EF["Entity Framework 6 Context"]
+        SQL[("SQL Server LocalDB")]
+        Cache[("In-process Memory Cache")]
+    end
+    subgraph External["External Integrations"]
+        AzureML["Azure ML Recommendation Endpoint"]
+        OAuth["Social OAuth Providers"]
+    end
+
+    Browser -->|"HTTP page requests"| MVC
+    Browser -->|"HTTP API requests"| API
+    Browser -->|"real-time connection"| Hub
+    MVC -->|"sign-in and authorization"| Auth
+    MVC -->|"delegates business operations"| Queries
+    MVC -->|"cart and checkout operations"| Cart
+    MVC -->|"catalog queries"| Catalog
+    MVC -->|"calculates totals"| Tax
+    API -->|"query operations"| Queries
+    API -->|"catalog queries"| Catalog
+    Queries -->|"Entity Framework queries"| EF
+    Cart -->|"Entity Framework updates"| EF
+    Catalog -->|"Entity Framework queries"| EF
+    EF -->|"SQL queries"| SQL
+    MVC -->|"cache product lists"| Cache
+    Catalog -->|"cache product details"| Cache
+    Auth -->|"external sign-in"| OAuth
+    Recommendations -->|"HTTP request"| AzureML
+    MVC -->|"recommendation request"| Recommendations
+</div>
+<h3 id="technology-stack-summary">Technology Stack Summary</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Layer</th><th>Technology</th><th>Version</th><th>Purpose</th>
+</tr></thead><tbody>
+<tr><td>Presentation</td><td>ASP.NET MVC</td><td>5.2.3</td><td>Server-rendered storefront and administrative pages</td></tr>
+<tr><td>API</td><td>ASP.NET Web API</td><td>5.2.3</td><td>Product and raincheck JSON endpoints</td></tr>
+<tr><td>Real-time</td><td>ASP.NET SignalR</td><td>2.2.2</td><td>Hub-based announcements</td></tr>
+<tr><td>Authentication</td><td>ASP.NET Identity and OWIN</td><td>2.2.1 / 3.1.0</td><td>Cookie sign-in, user management, and configured external providers</td></tr>
+<tr><td>Dependency injection</td><td>Unity</td><td>4.0.1</td><td>Registration and resolution of application components</td></tr>
+<tr><td>Persistence</td><td>Entity Framework</td><td>6.1.3</td><td>ORM and SQL Server data access</td></tr>
+<tr><td>Data store</td><td>SQL Server LocalDB</td><td>configured localdb</td><td>Relational application and identity data</td></tr>
+<tr><td>Caching</td><td><code>System.Runtime.Caching</code></td><td>.NET Framework</td><td>In-process caching of product information</td></tr>
+<tr><td>External recommendations</td><td>Azure ML HTTP endpoint</td><td>Endpoint-configured</td><td>Frequently-bought-together recommendations</td></tr>
+</tbody></table></div>
+<h3 id="data-storage-external-services">Data Storage & External Services</h3>
+<p>The web application uses a single SQL Server LocalDB connection for storefront and ASP.NET Identity data. Product lists and details are cached in-process. The recommendation component calls an Azure ML endpoint over HTTP and uses configuration for its model name and account key; social sign-in providers are also configured through application settings. No message broker or separate internal service was identified.</p>
+<h3 id="key-architectural-decisions">Key Architectural Decisions</h3>
+<ul>
+<li>The application is a layered monolith with MVC and Web API presentation components sharing a single EF6 context.</li>
+<li>Unity wires interfaces such as <code>IPartsUnlimitedContext</code>, query services, and external-service wrappers.</li>
+<li>Recommendation failures handled as <code>HttpRequestException</code> return an empty recommendation list; no retry or circuit-breaker policy was identified.</li>
+</ul>
+<h2 id="component-relationships">Component Relationships</h2>
+<div class="mermaid">
+flowchart LR
+    subgraph Presentation["Presentation"]
+        Storefront["Storefront MVC Controllers"]
+        Admin["Admin Area Controllers"]
+        WebApi["Products and Raincheck API"]
+        Views["Razor Views"]
+        SignalR["Announcement Hub"]
+    end
+    subgraph Logic["Business Logic"]
+        CartSvc["ShoppingCart"]
+        OrderQuery["OrdersQuery"]
+        RaincheckQuery["RaincheckQuery"]
+        Search["StringContainsProductSearch"]
+        Cost["DefaultShippingTaxCalculator"]
+        Reco["AzureMLFrequentlyBoughtTogetherRecommendationEngine"]
+    end
+    subgraph Data["Data Access"]
+        Context["IPartsUnlimitedContext"]
+        EFContext["PartsUnlimitedContext"]
+        SQLDB[("SQL Server LocalDB")]
+    end
+    subgraph Infrastructure["Infrastructure"]
+        Unity["Unity Container"]
+        Identity["ASP.NET Identity and OWIN"]
+        Cache["MemoryCache"]
+        Azure["Azure ML Endpoint"]
+        Social["Configured OAuth Providers"]
+    end
+
+    Storefront -->|"renders"| Views
+    Admin -->|"renders"| Views
+    Storefront -->|"cart and order operations"| CartSvc
+    Storefront -->|"order searches"| OrderQuery
+    WebApi -->|"raincheck operations"| RaincheckQuery
+    WebApi -->|"product queries"| Context
+    Storefront -->|"product search"| Search
+    Storefront -->|"total calculation"| Cost
+    Storefront -->|"recommendations"| Reco
+    CartSvc -->|"reads and writes"| Context
+    OrderQuery -->|"queries"| Context
+    RaincheckQuery -->|"queries and saves"| Context
+    Context -->|"implemented by"| EFContext
+    EFContext -->|"persists"| SQLDB
+    Unity -.->|"registers"| Context
+    Unity -.->|"registers"| OrderQuery
+    Unity -.->|"registers"| RaincheckQuery
+    Unity -.->|"registers"| Reco
+    Storefront -->|"cached catalog data"| Cache
+    Reco -->|"HTTP"| Azure
+    Identity -->|"external sign-in"| Social
+    SignalR -->|"broadcasts announcements"| Storefront
+</div>
+<h3 id="component-inventory">Component Inventory</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Component</th><th>Layer</th><th>Type</th><th>Responsibility</th>
+</tr></thead><tbody>
+<tr><td>Storefront MVC Controllers</td><td>Presentation</td><td>MVC controllers</td><td>Browse products, search, manage carts, and check out</td></tr>
+<tr><td>Admin Area Controllers</td><td>Presentation</td><td>MVC controllers</td><td>Manage products, customers, orders, and rainchecks</td></tr>
+<tr><td>ProductsController</td><td>Presentation</td><td>Web API controller</td><td>Return product collections and individual products</td></tr>
+<tr><td>RaincheckController</td><td>Presentation</td><td>Web API controller</td><td>Read and create raincheck records</td></tr>
+<tr><td>AnnouncementHub</td><td>Presentation</td><td>SignalR hub</td><td>Provide real-time announcement communication</td></tr>
+<tr><td>ShoppingCart</td><td>Business Logic</td><td>Domain service</td><td>Add/remove cart items, compute cart totals, and create order details</td></tr>
+<tr><td>OrdersQuery</td><td>Business Logic</td><td>Query service</td><td>Filter orders and load associated details</td></tr>
+<tr><td>RaincheckQuery</td><td>Business Logic</td><td>Query service</td><td>Read, populate, and persist rainchecks</td></tr>
+<tr><td>StringContainsProductSearch</td><td>Business Logic</td><td>Search service</td><td>Search products by text</td></tr>
+<tr><td>DefaultShippingTaxCalculator</td><td>Business Logic</td><td>Calculation service</td><td>Calculate shipping and tax totals</td></tr>
+<tr><td>AzureMLFrequentlyBoughtTogetherRecommendationEngine</td><td>Business Logic</td><td>Integration service</td><td>Request product recommendations and handle service failures</td></tr>
+<tr><td>IPartsUnlimitedContext</td><td>Data Access</td><td>Data abstraction</td><td>Expose entity sets and save operations</td></tr>
+<tr><td>PartsUnlimitedContext</td><td>Data Access</td><td>EF6 DbContext</td><td>Map application and identity entities to SQL Server</td></tr>
+<tr><td>Unity Container</td><td>Infrastructure</td><td>Dependency injection</td><td>Register and resolve application components</td></tr>
+<tr><td>ASP.NET Identity and OWIN</td><td>Infrastructure</td><td>Authentication middleware</td><td>Manage user identities, cookies, external sign-in, and two-factor flows</td></tr>
+<tr><td>MemoryCache</td><td>Infrastructure</td><td>In-process cache</td><td>Cache selected catalog data</td></tr>
+</tbody></table></div></div>
+</div>
+<div id="tab-api" class="tab-panel">
+  <div class="fact-content"><h1 id="api-service-communication-contracts">API & Service Communication Contracts</h1>
+<p>The application exposes MVC page actions and a small JSON API, with synchronous in-process calls for application workflows. It also makes an outbound HTTP request to an Azure ML recommendation endpoint.</p>
+<h2 id="service-catalog">Service Catalog</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Port</th><th>Category</th><th>Purpose</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>Not declared; hosted by IIS/IIS Express</td><td>API Layer and Business</td><td>Storefront, administration, authentication, and product/raincheck endpoints</td></tr>
+<tr><td>SQL Server LocalDB</td><td>Local configured connection</td><td>Infrastructure</td><td>Shared relational persistence for application and identity data</td></tr>
+<tr><td>Azure ML recommendation endpoint</td><td>HTTPS</td><td>Infrastructure</td><td>External frequently-bought-together recommendations</td></tr>
+</tbody></table></div>
+<p>No separate independently deployable business service, API gateway, or message broker was identified.</p>
+<h2 id="api-endpoints-inventory">API Endpoints Inventory</h2>
+<p>MVC actions use the default <code>{controller}/{action}/{id}</code> route unless otherwise noted. Similar actions are grouped because the MVC surface contains more than 30 page and account-management actions.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Method</th><th>Path</th><th>Request Type</th><th>Response Type</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Home/Index</code></td><td>None</td><td><code>HomeViewModel</code> rendered as HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Home/Recomendations</code></td><td>None</td><td>HTML page</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Store/Index</code>, <code>/Store/Browse?categoryId={categoryId}</code></td><td>Optional <code>categoryId</code> query parameter</td><td>Product listing HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Store/Details/{id}</code></td><td>Product ID path value</td><td>Product detail HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Search/Index?q={query}</code></td><td>Query parameter <code>q</code></td><td>Search results HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/ShoppingCart/Index</code></td><td>Session/cart context</td><td>Cart view model rendered as HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/ShoppingCart/AddToCart/{id}</code></td><td>Product ID path value</td><td>Redirect to cart/store</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>POST</td><td><code>/ShoppingCart/RemoveFromCart?id={id}</code></td><td>Cart item ID and anti-forgery token</td><td>JSON <code>ShoppingCartRemoveViewModel</code></td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET / POST</td><td><code>/Checkout/AddressAndPayment</code></td><td>GET has no body; POST accepts <code>Order</code> and form promo code</td><td>Checkout HTML or redirect after order creation</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Checkout/Complete/{id}</code></td><td>Order ID path value</td><td>Completion HTML, scoped to the signed-in user</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET</td><td><code>/Orders/Index</code>, <code>/Orders/Details/{id}</code></td><td>Optional date range or order ID</td><td>Order HTML</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET / POST</td><td><code>/Account/{action}</code></td><td>Account view models and token/query values</td><td>Sign-in, registration, confirmation, and password-flow HTML/redirects</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET / POST</td><td><code>/Manage/{action}</code></td><td>Account-management view models</td><td>Profile, phone, two-factor, and external-login HTML/redirects</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>GET / POST</td><td><code>/Admin/{controller}/{action}/{id?}</code></td><td>Controller/action-specific model or route values</td><td>Administrative HTML/redirects</td></tr>
+<tr><td>PartsUnlimitedWebsite API</td><td>GET</td><td><code>/api/products</code></td><td>Optional query parameter <code>sale</code> (default <code>false</code>)</td><td><code>IList<Product></code> JSON</td></tr>
+<tr><td>PartsUnlimitedWebsite API</td><td>GET</td><td><code>/api/products/{id}</code></td><td>Product ID path value</td><td>Product JSON (<code>200</code>) or <code>404</code></td></tr>
+<tr><td>PartsUnlimitedWebsite API</td><td>GET</td><td><code>/api/raincheck</code></td><td>None</td><td><code>IEnumerable<Raincheck></code> JSON</td></tr>
+<tr><td>PartsUnlimitedWebsite API</td><td>GET</td><td><code>/api/raincheck/{id}</code></td><td>Raincheck ID path value</td><td><code>Raincheck</code> JSON</td></tr>
+<tr><td>PartsUnlimitedWebsite API</td><td>POST</td><td><code>/api/raincheck</code></td><td><code>Raincheck</code> JSON body</td><td>Integer raincheck ID</td></tr>
+</tbody></table></div>
+<p>The Web API routes do not declare an explicit API version. MVC paths are governed by the conventional route configuration.</p>
+<h2 id="management-observability-endpoints">Management & Observability Endpoints</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Endpoint</th><th>Custom Metrics (if any)</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td><code>/swagger</code> (Swashbuckle UI/specification)</td><td>None identified</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>SignalR connection endpoint <code>/signalr</code></td><td>None identified</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>Health/readiness endpoint</td><td>None identified</td></tr>
+</tbody></table></div>
+<p>Application telemetry is abstracted behind <code>ITelemetryProvider</code>; an operational metrics export endpoint was not found.</p>
+<h2 id="dtos-contracts">DTOs & Contracts</h2>
+<p>The Web API serializes the <code>Product</code> and <code>Raincheck</code> domain entities directly; it does not use a gateway-level composition DTO. MVC requests use view models such as <code>LoginViewModel</code>, <code>RegisterViewModel</code>, and account-management models, while checkout accepts an <code>Order</code>. <code>ShoppingCartRemoveViewModel</code> and <code>OrderCostSummary</code> are response/presentation contracts. These are mutable classes rather than immutable records. Swashbuckle provides Swagger documentation, and Newtonsoft.Json is the JSON serialization library. No protobuf or GraphQL schema was found.</p>
+<h2 id="communication-patterns">Communication Patterns</h2>
+<p>MVC controllers call application services and query classes synchronously or asynchronously in-process, and the EF6 context accesses the shared SQL Server database. The recommendation engine uses an outbound HTTP GET to Azure ML, with model and product identifiers in the request; an <code>HttpRequestException</code> is tracked and degrades to an empty recommendation list. No retry, timeout policy, circuit breaker, service discovery, load balancing, message broker, or cross-service response aggregation was found.</p>
+<p>ASP.NET Identity/OWIN provides cookie authentication, two-factor flows, and external sign-in configuration. MVC controllers protect account-management, checkout, order, and administrative actions with authorization attributes; administrative controllers require the admin role. The two Web API controllers do not declare authorization attributes and are publicly callable at the application layer. The code does not enforce HTTPS for inbound requests; TLS behavior depends on the hosting configuration.</p>
+<h2 id="service-technology-matrix">Service Technology Matrix</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Web</th><th>Data Access</th><th>Discovery</th><th>Gateway</th><th>Actuator</th><th>Cache</th><th>Metrics</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>ASP.NET MVC 5 and Web API 2</td><td>Entity Framework 6</td><td>None</td><td>None</td><td>No health endpoint found</td><td>In-process <code>MemoryCache</code></td><td>Telemetry abstraction; no metrics export found</td></tr>
+<tr><td>SQL Server LocalDB</td><td>Relational database</td><td>SQL Server</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
+<tr><td>Azure ML endpoint</td><td>External HTTPS API</td><td>External service-owned</td><td>Configured endpoint URL</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
+</tbody></table></div>
+<h2 id="service-communication-sequence">Service Communication Sequence</h2>
+<div class="mermaid">
+sequenceDiagram
+    participant Customer
+    participant MVC as "Checkout Controller"
+    participant Cart as "ShoppingCart"
+    participant EF as "Entity Framework Context"
+    participant DB as "SQL Server"
+
+    Customer->>MVC: GET checkout form
+    MVC->>EF: Load signed-in user
+    EF->>DB: Query user record
+    DB-->>EF: User record
+    EF-->>MVC: User details
+    MVC-->>Customer: Render order form
+    Customer->>MVC: POST Order and promo code
+    alt Promo code accepted
+        MVC->>MVC: Set owner and order date
+        MVC->>EF: Add Order
+        MVC->>Cart: Create order details from cart
+        Cart->>EF: Add OrderDetail records and empty cart
+        MVC->>EF: Save changes
+        EF->>DB: Persist order and cart updates
+        DB-->>EF: Commit result
+        EF-->>MVC: Saved order ID
+        MVC-->>Customer: Redirect to order completion
+    else Promo code rejected
+        MVC-->>Customer: Redisplay checkout form
+    end
+</div></div>
+</div>
+<div id="tab-config" class="tab-panel">
+  <div class="fact-content"><h1 id="configuration-externalized-settings-inventory">Configuration & Externalized Settings Inventory</h1>
+<p>The website's runtime settings are primarily stored in <code>Web.config</code>, with Debug and Release transform files and separate Azure/PowerShell deployment configuration. Several integration credentials are configuration-backed; the checked-in administrator password setting is nonempty and is masked here.</p>
+<h2 id="configuration-sources">Configuration Sources</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Source</th><th>Type</th><th>Path/Location</th><th>Notes</th>
+</tr></thead><tbody>
+<tr><td>Website application configuration</td><td>.NET XML configuration</td><td><code>PartsUnlimitedWebsite/Web.config</code></td><td>App settings, connection string, Entity Framework provider, and ASP.NET runtime settings</td></tr>
+<tr><td>Debug transform</td><td>XML transform</td><td><code>PartsUnlimitedWebsite/Web.Debug.config</code></td><td>Build/deployment-specific transform</td></tr>
+<tr><td>Release transform</td><td>XML transform</td><td><code>PartsUnlimitedWebsite/Web.Release.config</code></td><td>Applies Release-specific error handling and removes selected debug settings</td></tr>
+<tr><td>Project and package manifests</td><td>MSBuild/NuGet</td><td><code>PartsUnlimitedWebsite/PartsUnlimitedWebsite.csproj</code>, <code>PartsUnlimitedWebsite/packages.config</code></td><td>Target framework, build configurations, assembly references, and package versions</td></tr>
+<tr><td>Solution and deployment projects</td><td>Visual Studio/MSBuild</td><td><code>IaaS2PaaSWeb.sln</code>, <code>Environments/Environments.deployproj</code>, <code>PartsUnlimitedDatabase/PartsUnlimitedDatabase.sqlproj</code></td><td>Web, database, and environment deployment definitions</td></tr>
+<tr><td>Environment deployment configuration</td><td>JSON and PowerShell/DSC</td><td><code>Environments/<em>.json</code>, <code>Environments/</em>.parameters.json</code>, <code>Environments/<em>.ps1</code>, <code>Environments/DSC/</em>.ps1</code></td><td>Azure resource and machine configuration; parameter files externalize deployment inputs</td></tr>
+<tr><td>Publish profile</td><td>Publish settings</td><td><code>PartsUnlimitedWebsite/Properties/PublishProfiles/FolderProfile.pubxml</code></td><td>Folder deployment profile</td></tr>
+</tbody></table></div>
+<p>No Spring profiles, <code>appsettings.{Environment}.json</code>, <code>.env</code> files, remote configuration server, Key Vault, Vault, or AWS Secrets Manager integration was identified.</p>
+<h2 id="build-profiles">Build Profiles</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Profile</th><th>Activation</th><th>Purpose</th><th>Key Dependencies/Plugins</th>
+</tr></thead><tbody>
+<tr><td>Debug</td><td>MSBuild <code>Debug</code> configuration</td><td>Local/debug build; defines <code>TRACE</code>, <code>DEBUG</code>, and <code>DEMO</code></td><td>Classic .NET Framework Web Application build</td></tr>
+<tr><td>Release</td><td>MSBuild <code>Release</code> configuration</td><td>Optimized deployment build; defines <code>TRACE</code></td><td>Uses <code>Web.Release.config</code> transform</td></tr>
+</tbody></table></div>
+<p>The project is an older non-SDK-style C# Web Application targeting .NET Framework 4.5.1.</p>
+<h2 id="runtime-profiles">Runtime Profiles</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Profile</th><th>Activation Method</th><th>Config Files</th><th>Key Overrides</th>
+</tr></thead><tbody>
+<tr><td>Default</td><td>Website configuration loaded by System.Configuration</td><td><code>Web.config</code></td><td>SQL Server LocalDB connection and application settings</td></tr>
+<tr><td>Debug</td><td>Deployment transform</td><td><code>Web.Debug.config</code></td><td>Debug deployment transform</td></tr>
+<tr><td>Release</td><td>Deployment transform</td><td><code>Web.Release.config</code></td><td>Remote-only custom errors; removes the <code>debug</code> compilation attribute</td></tr>
+</tbody></table></div>
+<p>There are no ASP.NET Core environment profiles or separate application-level database profiles. The included transform files do not declare a separate production database connection.</p>
+<h2 id="properties-inventory">Properties Inventory</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Property Key</th><th>Default</th><th>Profiles</th><th>Source</th>
+</tr></thead><tbody>
+<tr><td><code>ImagePath</code></td><td><code>/Images</code></td><td>Default</td><td><code>Web.config</code></td></tr>
+<tr><td><code>ShowRecommendations</code></td><td><code>false</code></td><td>Default</td><td><code>Web.config</code>; controls whether product recommendations are shown</td></tr>
+<tr><td><code>SiteDelayMilliseconds</code></td><td><code>0</code></td><td>Default</td><td><code>Web.config</code>; read by the store controller</td></tr>
+<tr><td><code>Authentication.Administrator.UserName</code></td><td>Configured administrator account</td><td>Default</td><td><code>Web.config</code>; used by startup user seeding</td></tr>
+<tr><td><code>Authentication.Administrator.Password</code></td><td><code>[MASKED — nonempty configured value]</code></td><td>Default</td><td><code>Web.config</code>; read by startup user seeding</td></tr>
+<tr><td><code>Authentication.{Facebook,Google,Microsoft,Twitter}.Key</code></td><td>Empty or placeholder</td><td>Default</td><td><code>Web.config</code>; external provider client IDs</td></tr>
+<tr><td><code>Authentication.{Facebook,Google,Microsoft,Twitter}.Secret</code></td><td>Empty</td><td>Default</td><td><code>Web.config</code>; external provider secrets</td></tr>
+<tr><td><code>MachineLearning.ModelName</code></td><td>Configured model name</td><td>Default</td><td><code>Web.config</code>; used to build the Azure ML request</td></tr>
+<tr><td><code>MachineLearning.AccountKey</code></td><td>Empty</td><td>Default</td><td><code>Web.config</code>; no populated key was identified</td></tr>
+<tr><td><code>Keys:ApplicationInsights:InstrumentationKey</code></td><td><code>[MASKED]</code></td><td>Default</td><td><code>Web.config</code>; telemetry integration is not active in the inspected provider</td></tr>
+<tr><td><code>DefaultConnectionString</code></td><td>SQL Server LocalDB with integrated authentication</td><td>Default</td><td><code>Web.config</code>; raw connection string omitted</td></tr>
+<tr><td><code>entityFramework</code> provider/factory</td><td>SQL Client and LocalDB factory</td><td>Default</td><td><code>Web.config</code></td></tr>
+<tr><td><code>customErrors</code></td><td>Off</td><td>Default; Release transform changes behavior</td><td><code>Web.config</code>, <code>Web.Release.config</code></td></tr>
+<tr><td><code>compilation.debug</code></td><td><code>true</code></td><td>Default; removed by Release transform</td><td><code>Web.config</code>, <code>Web.Release.config</code></td></tr>
+<tr><td><code>compilation.targetFramework</code> / <code>httpRuntime.targetFramework</code></td><td><code>4.5.1</code></td><td>Default</td><td><code>Web.config</code></td></tr>
+</tbody></table></div>
+<h2 id="startup-parameters-resource-requirements">Startup Parameters & Resource Requirements</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>JVM/Runtime Options</th><th>Memory</th><th>Instance Count</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>.NET Framework 4.5.1 under IIS/IIS Express; no JVM options</td><td>Not specified</td><td>Not specified</td></tr>
+<tr><td>SQL Server LocalDB</td><td>LocalDB connection configured by the website</td><td>Not specified</td><td>Development/local instance</td></tr>
+</tbody></table></div>
+<p>The deployment templates configure Windows and SQL Server resources, but no per-container CPU/memory limits or application instance count were found in the website project.</p>
+<h2 id="startup-dependency-chain">Startup Dependency Chain</h2>
+<ol>
+<li>IIS/IIS Express loads the website and its System.Web configuration.</li>
+<li>OWIN and Unity initialize authentication and the application's dependency registrations.</li>
+<li>Database-backed actions require the configured SQL Server database; EF6 migrations/initializer support schema setup and seed data.</li>
+<li>Azure ML recommendations and external OAuth providers are contacted only when their features are used; they are not required for application startup.</li>
+</ol>
+<p>No application health-check wait mechanism, readiness endpoint, or configured startup retry for the database was identified.</p>
+<h2 id="secrets-sensitive-configuration">Secrets & Sensitive Configuration</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Secret Reference</th><th>Type</th><th>Storage (masked)</th>
+</tr></thead><tbody>
+<tr><td><code>Authentication.Administrator.Password</code></td><td>Administrator password</td><td>Checked-in <code>Web.config</code>; <code>[MASKED]</code></td></tr>
+<tr><td><code>Authentication.{Facebook,Google,Microsoft,Twitter}.Secret</code></td><td>OAuth client secrets</td><td><code>Web.config</code>; currently empty</td></tr>
+<tr><td><code>MachineLearning.AccountKey</code></td><td>External service key</td><td><code>Web.config</code>; currently empty</td></tr>
+<tr><td><code>Keys:ApplicationInsights:InstrumentationKey</code></td><td>Telemetry identifier</td><td><code>Web.config</code>; <code>[MASKED]</code></td></tr>
+<tr><td>Deployment administrator/database credentials</td><td>Deployment inputs</td><td>Parameter/script variables; values are not reproduced here</td></tr>
+</tbody></table></div>
+<h3 id="secrets-provisioning-workflow">Secrets Provisioning Workflow</h3>
+<p>The application reads configuration values through <code>ConfigurationManager</code> and <code>ConfigurationHelpers</code>. OAuth and machine-learning credentials are referenced by configuration key, but the inspected provider settings are empty or placeholders. The administrator password setting is populated in the checked-in <code>Web.config</code> and is consumed by startup seeding; no secret vault, encryption-at-rest for configuration, rotation process, or managed-identity workflow was identified. Deployment scripts accept credential variables/parameters, but their values are not included in this inventory.</p>
+<h2 id="feature-flags">Feature Flags</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Flag Name</th><th>Default</th><th>Controlled By</th>
+</tr></thead><tbody>
+<tr><td><code>ShowRecommendations</code></td><td><code>false</code></td><td><code>Web.config</code> app setting</td></tr>
+<tr><td><code>DEMO</code> conditional compilation symbol</td><td>Enabled in Debug only</td><td>MSBuild Debug configuration</td></tr>
+<tr><td>Application Insights telemetry integration</td><td>Disabled/not active in inspected implementation</td><td>Telemetry provider/startup code</td></tr>
+</tbody></table></div>
+<h2 id="framework-runtime-versions">Framework & Runtime Versions</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Component</th><th>Version</th><th>Source</th>
+</tr></thead><tbody>
+<tr><td>.NET Framework</td><td>4.5.1</td><td><code>PartsUnlimitedWebsite.csproj</code>, <code>Web.config</code></td></tr>
+<tr><td>ASP.NET MVC</td><td>5.2.3</td><td><code>packages.config</code></td></tr>
+<tr><td>ASP.NET Web API</td><td>5.2.3</td><td><code>packages.config</code></td></tr>
+<tr><td>Entity Framework</td><td>6.1.3</td><td><code>packages.config</code></td></tr>
+<tr><td>ASP.NET Identity</td><td>2.2.1</td><td><code>packages.config</code></td></tr>
+<tr><td>Microsoft.Owin</td><td>3.1.0</td><td><code>packages.config</code></td></tr>
+<tr><td>ASP.NET SignalR</td><td>2.2.2</td><td><code>packages.config</code></td></tr>
+<tr><td>Newtonsoft.Json</td><td>10.0.3</td><td><code>packages.config</code></td></tr>
+<tr><td>Unity</td><td>4.0.1</td><td><code>packages.config</code></td></tr>
+<tr><td>Swashbuckle</td><td>5.6.0</td><td><code>packages.config</code></td></tr>
+<tr><td>MSBuild project format</td><td>ToolsVersion 12.0, non-SDK-style</td><td><code>PartsUnlimitedWebsite.csproj</code></td></tr>
+<tr><td>Hosting OS/runtime</td><td>IIS/IIS Express on Windows for the classic Web Application targets</td><td>Project and environment deployment files</td></tr>
+</tbody></table></div></div>
+</div>
+<div id="tab-workflows" class="tab-panel">
+  <div class="fact-content"><h1 id="core-business-workflows">Core Business Workflows</h1>
+<p>PartsUnlimited supports an online parts storefront with product discovery, a session-associated shopping cart, order checkout, customer accounts, and administrative catalog management. Product recommendations are optionally enriched by an external recommendation service.</p>
+<h2 id="domain-entities">Domain Entities</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Entity</th><th>Service / Bounded Context</th><th>Description</th><th>Key Relationships</th>
+</tr></thead><tbody>
+<tr><td>Product</td><td>PartsUnlimitedWebsite / Catalog</td><td>A part offered for sale with catalog, price, inventory, and recommendation data</td><td>Belongs to a Category; appears in order details, carts, and rainchecks</td></tr>
+<tr><td>Category</td><td>PartsUnlimitedWebsite / Catalog</td><td>A grouping used to browse products</td><td>Contains Products</td></tr>
+<tr><td>CartItem</td><td>PartsUnlimitedWebsite / Shopping</td><td>A product and quantity associated with a visitor's cart</td><td>References Product; grouped by a cart/session identifier</td></tr>
+<tr><td>Order</td><td>PartsUnlimitedWebsite / Ordering</td><td>A customer's submitted purchase and delivery information</td><td>Contains OrderDetails and is associated with a signed-in username</td></tr>
+<tr><td>OrderDetail</td><td>PartsUnlimitedWebsite / Ordering</td><td>A product line captured when a cart is checked out</td><td>References Order and Product</td></tr>
+<tr><td>ApplicationUser</td><td>PartsUnlimitedWebsite / Identity</td><td>A registered storefront or administrative account</td><td>Identity data is used for sign-in and order ownership</td></tr>
+<tr><td>Raincheck</td><td>PartsUnlimitedWebsite / Store Operations</td><td>A store-issued record for a product not currently available</td><td>References Product and issuing Store</td></tr>
+<tr><td>Store</td><td>PartsUnlimitedWebsite / Store Operations</td><td>A store that issues rainchecks</td><td>Can issue multiple Rainchecks</td></tr>
+</tbody></table></div>
+<h2 id="service-to-domain-mapping">Service-to-Domain Mapping</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Domain Context</th><th>Owned Entities</th><th>External Dependencies</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>Catalog, Shopping, Ordering, Store Operations, and Identity</td><td>Product, Category, CartItem, Order, OrderDetail, Raincheck, Store, ApplicationUser</td><td>SQL Server database; optional Azure ML recommendation endpoint; configured social identity providers</td></tr>
+</tbody></table></div>
+<p>All domain contexts are implemented within one application and share the same database/context. The Azure ML integration returns recommendation identifiers; it does not own application entities or perform cross-service data aggregation.</p>
+<h2 id="primary-workflows">Primary Workflows</h2>
+<h3 id="workflow-1-add-products-to-cart-and-check-out">Workflow 1: Add products to cart and check out</h3>
+<ol>
+<li>A visitor selects a product; the cart service locates the visitor's cart using the session-associated cart identifier.</li>
+<li>The service increments an existing product line or adds a new cart item.</li>
+<li>A signed-in customer submits shipping/order details and a promo code at checkout.</li>
+<li>The checkout action accepts the configured <code>FREE</code> promo code case-insensitively; otherwise it redisplays the form.</li>
+<li>On acceptance, the application assigns the signed-in username and current date, creates an Order and OrderDetails from cart contents, computes the order total, empties the cart, and saves the changes.</li>
+<li>The completion action verifies that the requested order belongs to the signed-in username before displaying confirmation.</li>
+</ol>
+<h3 id="workflow-2-administer-the-product-catalog">Workflow 2: Administer the product catalog</h3>
+<p>An administrator with the required role can list, create, edit, or remove products. The application validates product models before saving changes, clears affected cached product data, and broadcasts a product announcement through SignalR after a successful creation.</p>
+<h3 id="workflow-3-display-product-recommendations">Workflow 3: Display product recommendations</h3>
+<p>When recommendations are enabled, the product detail view requests recommendation identifiers from the configured Azure ML endpoint. The application returns an empty recommendation list if the HTTP request fails or the response contains no recommendation set.</p>
+<h2 id="cross-service-data-flows">Cross-Service Data Flows</h2>
+<p>There are no internal service-to-service data flows. The only identified outbound business-data exchange is the recommendation request: the application sends configured model information and a product identifier to Azure ML, then uses the returned product identifiers for recommendations. If the HTTP call fails, the recommendation list is empty; product browsing remains available. No retries, circuit breaker, or local recommendation persistence was found.</p>
+<h2 id="business-workflow-sequence">Business Workflow Sequence</h2>
+<div class="mermaid">
+sequenceDiagram
+    participant Customer
+    participant Checkout as "Checkout Controller"
+    participant Cart as "Shopping Cart"
+    participant Context as "Data Context"
+    participant Database as "Application Database"
+
+    Customer->>Checkout: Submit order details and promo code
+    Checkout->>Checkout: Check promo code
+    alt Promo code is accepted
+        Checkout->>Context: Set customer identity and order date
+        Checkout->>Context: Add Order
+        Checkout->>Cart: Create order from current cart
+        Cart->>Context: Add OrderDetail lines and clear cart
+        Checkout->>Context: Save all changes
+        Context->>Database: Persist order and cart updates
+        Database-->>Context: Save result
+        Context-->>Checkout: Order identifier
+        Checkout-->>Customer: Redirect to completion
+        Customer->>Checkout: Request completion
+        Checkout->>Context: Verify order belongs to customer
+        Checkout-->>Customer: Show completion or error
+    else Promo code is rejected
+        Checkout-->>Customer: Redisplay checkout form
+    end
+</div>
+<h2 id="business-rules-decision-logic">Business Rules & Decision Logic</h2>
+<ul>
+<li><strong>Checkout eligibility:</strong> The submitted promo code must match <code>FREE</code> without case sensitivity; the checkout action is restricted to authenticated users. Although the <code>Order</code> model has data-annotation constraints, the checkout action does not explicitly gate persistence on <code>ModelState.IsValid</code>.</li>
+<li><strong>Order ownership:</strong> Completion and order views scope customer access by the signed-in username; administrative order searches are separately role-protected.</li>
+<li><strong>Cart behavior:</strong> Adding an existing product increments its quantity. Removing a line decrements quantities above one and deletes the line at one. Checkout snapshots each product's current price into an order detail, computes an order total, and empties the cart.</li>
+<li><strong>Catalog validation:</strong> Product and order view models use data annotations for required values, lengths, ranges, and email/phone formats. The full persistence model and constraints are described in <code>data-architecture.md</code>.</li>
+<li><strong>Cost calculation:</strong> The shared shipping/tax calculator charges per item and applies a standard tax rate with a different rate for postal codes beginning with <code>98</code>. The cart-removal response contains a separate displayed-total calculation, so its tax presentation may differ from the shared calculator.</li>
+<li><strong>Account rules:</strong> ASP.NET Identity enforces the configured password and user rules, supports two-factor flows, and protects administrative operations through role authorization.</li>
+<li><strong>Transactions and side effects:</strong> Order/cart changes are saved together through EF6 <code>SaveChangesAsync</code>; no distributed transaction or compensating workflow exists. Product creation emits a SignalR announcement after persistence. Checkout catches exceptions and redisplays the form rather than exposing the exception to the customer.</li>
+</ul></div>
+</div>
+<div id="tab-deps" class="tab-panel">
+  <div class="fact-content"><h1 id="dependency-map">Dependency Map</h1>
+<p>The <code>PartsUnlimitedWebsite</code> project declares 46 NuGet dependencies in <code>packages.config</code>. The diagram groups related framework components to keep the graph legible; the summary lists the important packages and versions.</p>
+<h2 id="dependencies">Dependencies</h2>
+<div class="mermaid">
+flowchart LR
+    App["PartsUnlimitedWebsite"]
+    subgraph Web["Web Frameworks"]
+        MVC["ASP.NET MVC 5.2.3"]
+        WebApi["ASP.NET Web API 5.2.3"]
+        Razor["Razor and Web Pages 3.2.3"]
+        SignalR["SignalR 2.2.2"]
+        WebOpt["Web Optimization 1.1.3"]
+    end
+    subgraph Data["Database and ORM"]
+        EF["Entity Framework 6.1.3"]
+        IdentityEF["Identity EntityFramework 2.2.1"]
+    end
+    subgraph Security["Security"]
+        Identity["ASP.NET Identity 2.2.1"]
+        Owin["OWIN and authentication packages 3.1.0"]
+        SignalROwin["SignalR OWIN 1.2.2"]
+    end
+    subgraph Frontend["Frontend Libraries"]
+        Bootstrap["Bootstrap 3.4.1"]
+        JQuery["jQuery 3.2.1"]
+        JQueryUI["jQuery UI Combined 1.12.1"]
+        JQueryValidation["jQuery Validation 1.16.0"]
+        Modernizr["Modernizr 2.8.3"]
+        WebGrease["WebGrease 1.6.0"]
+    end
+    subgraph Utility["Utilities and Integration"]
+        Json["Newtonsoft.Json 10.0.3"]
+        Unity["Unity 4.0.1"]
+        Swagger["Swashbuckle 5.6.0"]
+        Antlr["Antlr 3.5.0.2"]
+        Misc["Other declared packages"]
+    end
+
+    App -->|"web stack"| MVC
+    App -->|"API"| WebApi
+    App -->|"views"| Razor
+    App -->|"real-time"| SignalR
+    App -->|"persistence"| EF
+    App -->|"identity persistence"| IdentityEF
+    App -->|"authentication"| Identity
+    App -->|"middleware"| Owin
+    App -->|"client UI"| Bootstrap
+    App -->|"client UI"| JQuery
+    App -->|"client UI"| JQueryUI
+    App -->|"serialization"| Json
+    App -->|"dependency injection"| Unity
+    App -->|"API documentation"| Swagger
+    App -->|"other dependencies"| Misc
+</div>
+<h3 id="dependency-summary">Dependency Summary</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Category</th><th>Count</th><th>Key Libraries</th><th>Notes</th>
+</tr></thead><tbody>
+<tr><td>Web Frameworks</td><td>12</td><td>ASP.NET MVC 5.2.3, Web API 5.2.3, Razor/Web Pages 3.2.3, SignalR 2.2.2, Web Optimization 1.1.3</td><td>Classic System.Web web stack</td></tr>
+<tr><td>Database / ORM</td><td>2</td><td>Entity Framework 6.1.3, Microsoft.AspNet.Identity.EntityFramework 2.2.1</td><td>EF6 over SQL Server; Identity uses the same context</td></tr>
+<tr><td>Security</td><td>13</td><td>ASP.NET Identity 2.2.1, Microsoft.Owin 3.1.0, OWIN Security providers 3.1.0</td><td>Includes cookie, OAuth, and provider-specific packages</td></tr>
+<tr><td>Frontend Libraries</td><td>9</td><td>Bootstrap 3.4.1, jQuery 3.2.1, jQuery UI Combined 1.12.1, jQuery Validation 1.16.0, Modernizr 2.8.3</td><td>Legacy browser-side dependency set</td></tr>
+<tr><td>Utilities</td><td>10</td><td>Newtonsoft.Json 10.0.3, Unity 4.0.1, Swashbuckle 5.6.0, Antlr 3.5.0.2, CommonServiceLocator 1.3</td><td>Includes dependency injection, Swagger, and supporting packages</td></tr>
+</tbody></table></div>
+<h3 id="version-compatibility-risks">Version & Compatibility Risks</h3>
+<p>The application targets .NET Framework 4.5.1 and uses older ASP.NET, OWIN, and JavaScript packages. The dependency scan found high-severity advisories for Newtonsoft.Json 10.0.3, Microsoft.AspNet.Identity.Owin 2.2.1, Microsoft.Owin 3.1.0, Microsoft.Owin.Security.Cookies 3.1.0, and jQuery.Validation 1.16.0; see the security findings for advisory details. <code>dotnet list package --include-transitive</code> could not evaluate this legacy Web Application project because the Visual Studio WebApplication MSBuild targets are unavailable on this Linux runner, so the dependency inventory is based on the direct declarations in <code>packages.config</code>.</p>
+<h3 id="notable-observations">Notable Observations</h3>
+<ul>
+<li><code>packages.config</code> is the package manifest; no lock file or central package version file was found.</li>
+<li>Framework components are split across separate NuGet packages, including several OWIN and SignalR packages that share version lines.</li>
+<li>The main project has no declared test-scoped packages.</li>
+</ul>
+<h2 id="test-dependencies">Test Dependencies</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Framework</th><th>Version</th><th>Notes</th>
+</tr></thead><tbody>
+<tr><td>None detected</td><td>—</td><td>No test-scoped dependencies are declared in <code>packages.config</code>.</td></tr>
+</tbody></table></div>
+<p>Total test-scope dependencies: 0</p>
+<p>No test dependencies were detected in the project package manifest.</p></div>
+</div>
+<div id="tab-data" class="tab-panel">
+  <div class="fact-content"><h1 id="data-architecture-persistence-layer">Data Architecture & Persistence Layer</h1>
+<p>The application persists its catalog, shopping, order, raincheck, and identity data in a shared SQL Server database through Entity Framework 6. The model is maintained in one web-application bounded context rather than through separate service-owned stores.</p>
+<h2 id="database-configuration">Database Configuration</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service/Module</th><th>DB Type</th><th>Profile</th><th>Driver</th><th>Connection</th><th>Migration Tool</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>SQL Server LocalDB</td><td>Default development configuration</td><td><code>System.Data.SqlClient</code></td><td><code>DefaultConnectionString</code> in <code>Web.config</code>; integrated authentication</td><td>EF6 migrations and a database initializer/seed routine</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td>SQL Server</td><td>Debug/Release transforms</td><td><code>System.Data.SqlClient</code></td><td>No distinct environment connection definition was identified in the transforms</td><td>EF6 migrations</td></tr>
+</tbody></table></div>
+<p>The EF6 context disables lazy loading. The codebase includes an initial migration and a database initializer that seeds catalog data. No Flyway, Liquibase, or separate schema migration service was found.</p>
+<h2 id="data-ownership-per-service">Data Ownership per Service</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Tables Owned</th><th>ORM Framework</th><th>Caching</th><th>Notes</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td>Products, categories, orders, order details, cart items, rainchecks, stores, application users, and ASP.NET Identity data</td><td>Entity Framework 6</td><td>In-process <code>MemoryCache</code> for selected product data</td><td>One shared database and <code>PartsUnlimitedContext</code>; no service-specific schema boundary</td></tr>
+</tbody></table></div>
+<h2 id="entity-model">Entity Model</h2>
+<div class="mermaid">
+erDiagram
+    Category ||--o{ Product : "contains"
+    Product ||--o{ OrderDetail : "referenced by"
+    Order ||--o{ OrderDetail : "contains"
+    Product ||--o{ CartItem : "selected by"
+    Product ||--o{ Raincheck : "offered for"
+    Store ||--o{ Raincheck : "issues"
+
+    Category {
+        int CategoryId PK
+        string Name
+        string Description
+        string ImageUrl
+    }
+    Product {
+        int ProductId PK
+        int CategoryId FK
+        string SkuNumber
+        string Title
+        decimal Price
+        decimal SalePrice
+        int Inventory
+    }
+    Order {
+        int OrderId PK
+        string Username
+        string Name
+        string Email
+        decimal Total
+    }
+    OrderDetail {
+        int OrderDetailId PK
+        int OrderId FK
+        int ProductId FK
+        int Count
+        decimal UnitPrice
+    }
+    CartItem {
+        int CartItemId PK
+        int ProductId FK
+        string CartId
+        int Count
+    }
+    Raincheck {
+        int RaincheckId PK
+        int ProductId FK
+        int StoreId FK
+        int Count
+        double SalePrice
+    }
+    Store {
+        int StoreId PK
+        string Name
+    }
+    ApplicationUser {
+        string Id PK
+        string Name
+    }
+</div>
+<p>Core entity sources: <code>Models/Category.cs</code>, <code>Models/Product.cs</code>, <code>Models/Order.cs</code>, <code>Models/OrderDetail.cs</code>, <code>Models/CartItem.cs</code>, <code>Models/Raincheck.cs</code>, <code>Models/Store.cs</code>, and <code>Models/ApplicationUser.cs</code>. <code>PartsUnlimitedContext.OnModelCreating</code> explicitly configures primary keys; navigation properties and conventional EF relationships connect products to categories, orders to order details, products to order details/cart items/rainchecks, and stores to rainchecks.</p>
+<h2 id="key-repository-methods">Key Repository Methods</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Service</th><th>Repository</th><th>Notable Methods</th><th>Purpose</th>
+</tr></thead><tbody>
+<tr><td>PartsUnlimitedWebsite</td><td><code>OrdersQuery</code> (<code>Utils/OrdersQuery.cs</code>)</td><td><code>IndexHelperAsync(username, start, end, invalidOrderSearch, isAdminSearch)</code></td><td>Filters orders by date range and, when provided, username; loads order details and associated products</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td><code>OrdersQuery</code> (<code>Utils/OrdersQuery.cs</code>)</td><td><code>FindOrderAsync(id)</code></td><td>Finds an order and loads its details and products</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td><code>RaincheckQuery</code> (<code>Utils/RaincheckQuery.cs</code>)</td><td><code>GetAllAsync()</code>, <code>FindAsync(id)</code></td><td>Retrieves rainchecks and populates their store, product, and category navigation data</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td><code>RaincheckQuery</code> (<code>Utils/RaincheckQuery.cs</code>)</td><td><code>AddAsync(raincheck)</code></td><td>Adds a raincheck and saves changes</td></tr>
+<tr><td>PartsUnlimitedWebsite</td><td><code>IPartsUnlimitedContext</code> (<code>Models/IPartsUnlimitedContext.cs</code>)</td><td>Entity sets, <code>SaveChangesAsync</code>, and <code>Entry</code></td><td>Shared data-access abstraction used by controllers and query services</td></tr>
+</tbody></table></div>
+<p>The query classes provide selected data operations, while many controllers also query entity sets on the shared context directly. No separate generic repository framework or raw SQL query method was identified.</p>
+<h2 id="caching-strategy">Caching Strategy</h2>
+<p>The application uses the process-local <code>MemoryCache.Default</code>; no distributed cache is configured. The home page caches top-selling and new-arrival product lists for 10 minutes, product details use a 10-minute sliding expiration, and selected latest-product data is cached for 10 minutes. Administrative create/edit/delete actions remove relevant entries. Cache state is local to each web process.</p>
+<h2 id="data-ownership-boundaries">Data Ownership Boundaries</h2>
+<p>All domain and identity entities are owned by the single PartsUnlimitedWebsite application and share the same SQL Server database/context. There is no database-per-service or cross-service database access. Controllers and query services perform in-process LINQ-to-Entities queries; the Azure ML recommendation integration exchanges product identifiers over HTTP but does not share the application database. The application does not implement CQRS or an outbox pattern.</p>
+<h3 id="data-classification-sensitivity">Data Classification & Sensitivity</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Entity</th><th>Sensitive Fields</th><th>Classification (PII/PHI/PCI/None)</th><th>Controls in Place</th>
+</tr></thead><tbody>
+<tr><td>Order</td><td>Name, address, city, state, postal code, country, phone, and email</td><td>PII</td><td>No field-level encryption or masking was identified in the application model; transport/storage protections depend on hosting and database configuration</td></tr>
+<tr><td>ApplicationUser</td><td>Identity username/email and profile name</td><td>PII</td><td>ASP.NET Identity manages password hashes; no field-level encryption or masking for profile data was identified</td></tr>
+<tr><td>Product, Category, CartItem, OrderDetail, Raincheck, Store</td><td>No direct PII/PHI/PCI fields identified in these model classes</td><td>None identified</td><td>No additional field-level controls identified</td></tr>
+</tbody></table></div></div>
+</div>
+<p class="footer">Your feedback is invaluable &mdash; <a href="https://aka.ms/ghcp-appmod/feedback">Share feedback</a></p>
+<script>
+function toggleRow(rowId, triggerRow) {
+  var detail = document.getElementById(rowId);
+  var btn = document.getElementById('btn-' + rowId);
+  if (!detail) return;
+  var visible = detail.style.display !== 'none';
+  detail.style.display = visible ? 'none' : 'table-row';
+  if (btn) btn.classList.toggle('open', !visible);
+}
+(function() {
+  var nav = document.querySelector('.tab-nav');
+  if (!nav) return;
+  nav.addEventListener('click', function(e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    var targetId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    var panel = document.getElementById(targetId);
+    if (panel) {
+      panel.classList.add('active');
+      if (window.__mermaidReady) { window.__renderMermaidIn(panel); }
+    }
+  });
+})();
+
+// ── Diagram lightbox ────────────────────────────────────────
+(function() {
+  var lightbox = document.getElementById('diagram-lightbox');
+  var inner = document.getElementById('diagram-lightbox-inner');
+  var closeBtn = document.getElementById('diagram-lightbox-close');
+  if (!lightbox || !inner || !closeBtn) return;
+
+  var scale = 1;
+  var translateX = 0;
+  var translateY = 0;
+  var isDragging = false;
+  var dragStartX = 0;
+  var dragStartY = 0;
+
+  function applyTransform() {
+    var svg = inner.querySelector('svg');
+    if (svg) {
+      svg.style.transform = 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scale + ')';
+      svg.style.transformOrigin = 'center center';
+      svg.style.transition = 'none';
+    }
+  }
+
+  function resetTransform() {
+    scale = 1; translateX = 0; translateY = 0;
+    applyTransform();
+  }
+
+  function openLightbox(svgEl) {
+    inner.innerHTML = svgEl.outerHTML;
+    var injected = inner.querySelector('svg');
+    if (injected) {
+      injected.removeAttribute('width');
+      injected.removeAttribute('height');
+      injected.style.cursor = 'grab';
+    }
+    resetTransform();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    inner.innerHTML = '';
+    document.body.style.overflow = '';
+    resetTransform();
+  }
+
+  inner.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    var delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale = Math.min(Math.max(scale * delta, 0.3), 8);
+    applyTransform();
+  }, { passive: false });
+
+  inner.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    isDragging = true;
+    dragStartX = e.clientX - translateX;
+    dragStartY = e.clientY - translateY;
+    var svg = inner.querySelector('svg');
+    if (svg) { svg.style.cursor = 'grabbing'; }
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    translateX = e.clientX - dragStartX;
+    translateY = e.clientY - dragStartY;
+    applyTransform();
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (!isDragging) return;
+    isDragging = false;
+    var svg = inner.querySelector('svg');
+    if (svg) { svg.style.cursor = 'grab'; }
+  });
+
+  inner.addEventListener('dblclick', function() { resetTransform(); });
+
+  document.addEventListener('click', function(e) {
+    var card = e.target.closest('.mermaid');
+    if (!card) return;
+    if (e.target.closest('.diagram-lightbox-close')) return;
+    var svg = card.querySelector('svg');
+    if (svg) { openLightbox(svg); }
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) { closeLightbox(); }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeLightbox(); }
+  });
+})();
+
+var _currentTarget = '';
+
+function toggleMultiSelect(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  document.querySelectorAll('.multi-select.open').forEach(function(ms) { if (ms.id !== id) ms.classList.remove('open'); });
+  el.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select.open').forEach(function(ms) { ms.classList.remove('open'); });
+  }
+});
+
+function getMultiSelectValues(msId) {
+  var el = document.getElementById(msId);
+  if (!el) return [];
+  var checked = el.querySelectorAll('input[type=checkbox]:checked');
+  var vals = [];
+  for (var i = 0; i < checked.length; i++) vals.push(checked[i].value);
+  return vals;
+}
+
+function onMultiSelectChange(msId, label) {
+  var el = document.getElementById(msId);
+  if (!el) return;
+  var vals = getMultiSelectValues(msId);
+  var total = el.querySelectorAll('input[type=checkbox]').length;
+  var btn = el.querySelector('.multi-select-btn');
+  if (btn) {
+    btn.textContent = vals.length > 0 && vals.length < total ? label + ' (' + vals.length + ')' : label;
+  }
+  applyFilters();
+}
+
+function applyFilters() {
+  var selectedDomains = getMultiSelectValues('domain-ms');
+  var selectedCrits = getMultiSelectValues('criticality-ms');
+
+  var sections = document.querySelectorAll('.issue-section');
+  for (var i = 0; i < sections.length; i++) {
+    var domain = sections[i].getAttribute('data-domain');
+    sections[i].style.display = (selectedDomains.length === 0 || selectedDomains.indexOf(domain) >= 0) ? '' : 'none';
+  }
+
+  var rows = document.querySelectorAll('.issue-row');
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    var section = row.closest('.issue-section');
+    if (section && section.style.display === 'none') {
+      row.style.display = 'none';
+      var next = row.nextElementSibling;
+      if (next && next.classList.contains('detail-row')) next.style.display = 'none';
+      continue;
+    }
+
+    var show = true;
+    if (_currentTarget && row.hasAttribute('data-targets')) {
+      var targetsStr = row.getAttribute('data-targets');
+      if (targetsStr && targetsStr !== '{}') {
+        try {
+          var targets = JSON.parse(targetsStr);
+          if (Object.keys(targets).length > 0 && !targets[_currentTarget]) {
+            show = false;
+          }
+        } catch(e) {}
+      }
+    }
+
+    if (show && selectedCrits.length > 0) {
+      var crit = row.getAttribute('data-criticality');
+      if (selectedCrits.indexOf(crit) < 0) show = false;
+    }
+
+    row.style.display = show ? '' : 'none';
+    var nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.classList.contains('detail-row')) {
+      if (!show) nextRow.style.display = 'none';
+    }
+  }
+}
+
+function clearAllFilters() {
+  document.querySelectorAll('.multi-select input[type=checkbox]').forEach(function(cb) { cb.checked = false; });
+  var domainBtn = document.querySelector('#domain-ms .multi-select-btn');
+  if (domainBtn) domainBtn.textContent = 'Domain';
+  var critBtn = document.querySelector('#criticality-ms .multi-select-btn');
+  if (critBtn) critBtn.textContent = 'Criticality';
+  applyFilters();
+}
+
+function onTargetChange(targetId) {
+  _currentTarget = targetId;
+  var rows = document.querySelectorAll('.issue-row[data-targets]');
+  var totalEffort = 0;
+  var domainCrits = {};
+
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    var targets = JSON.parse(row.getAttribute('data-targets'));
+    var section = row.closest('.issue-section');
+    var domain = section ? section.getAttribute('data-domain') : '';
+
+    if (!targets || Object.keys(targets).length === 0) {
+      var sp = parseFloat(row.querySelector('.sp-cell').textContent) || 0;
+      totalEffort += sp;
+      if (!domainCrits[domain]) domainCrits[domain] = {mandatory:0,potential:0,optional:0};
+      var crit = row.getAttribute('data-criticality') || 'optional';
+      domainCrits[domain][crit] = (domainCrits[domain][crit] || 0) + 1;
+      continue;
+    }
+
+    var override = targets[targetId];
+    if (!override) {
+      continue;
+    }
+
+    var newSeverity = (override.severity || row.getAttribute('data-default-severity') || '').toLowerCase();
+    row.setAttribute('data-criticality', newSeverity);
+    var critCell = row.querySelector('.crit-cell');
+    if (critCell) {
+      var critText = newSeverity === 'mandatory' ? 'Mandatory' : newSeverity === 'potential' ? 'Potential' : 'Optional';
+      var cssClass = newSeverity === 'mandatory' ? 'crit-square-mandatory' : newSeverity === 'potential' ? 'crit-square-potential' : 'crit-square-optional';
+      critCell.innerHTML = '<span class="crit-label"><span class="crit-square ' + cssClass + '"></span>' + critText + '</span>';
+    }
+
+    var newEffort = override.effort !== undefined ? override.effort : parseFloat(row.getAttribute('data-default-effort')) || 0;
+    var spCell = row.querySelector('.sp-cell');
+    if (spCell) spCell.textContent = newEffort;
+    totalEffort += newEffort;
+
+    if (!domainCrits[domain]) domainCrits[domain] = {mandatory:0,potential:0,optional:0};
+    domainCrits[domain][newSeverity] = (domainCrits[domain][newSeverity] || 0) + 1;
+  }
+
+  var secSection = document.querySelector('.issue-section[data-domain="security"]');
+  if (secSection) {
+    var secRows = secSection.querySelectorAll('.issue-row');
+    for (var j = 0; j < secRows.length; j++) {
+      if (!secRows[j].hasAttribute('data-targets') || secRows[j].getAttribute('data-targets') === '') {
+        var sp = parseFloat(secRows[j].querySelector('.sp-cell').textContent) || 0;
+        totalEffort += sp;
+        if (!domainCrits['security']) domainCrits['security'] = {mandatory:0,potential:0,optional:0};
+        var sc = secRows[j].getAttribute('data-criticality') || 'optional';
+        domainCrits['security'][sc] = (domainCrits['security'][sc] || 0) + 1;
+      }
+    }
+  }
+
+  var label = totalEffort < 20 ? 'S' : totalEffort < 50 ? 'M' : totalEffort < 100 ? 'L' : 'XL';
+  var effortEl = document.getElementById('effort-display');
+  if (effortEl) effortEl.textContent = label + ' (total story points: ' + totalEffort + ')';
+
+  updateDonuts(domainCrits);
+  applyFilters();
+}
+
+function updateDonuts(domainCrits) {
+  var container = document.getElementById('donut-container');
+  if (!container) return;
+  container.innerHTML = '';
+  var domainNames = {'cloud-readiness':'Cloud Readiness','java-upgrade':'Java Upgrade','dotnet-upgrade':'DotNET Upgrade','security':'Security'};
+  var domainOrder = ['cloud-readiness','java-upgrade','dotnet-upgrade','security'];
+  for (var d = 0; d < domainOrder.length; d++) {
+    var key = domainOrder[d];
+    var c = domainCrits[key];
+    if (!c || (c.mandatory + c.potential + c.optional) === 0) continue;
+    var total = c.mandatory + c.potential + c.optional;
+    var div = document.createElement('div');
+    div.className = 'domain-summary-item';
+    div.innerHTML = buildDonutSvg(c.mandatory, c.potential, c.optional) +
+      '<h3>' + domainNames[key] + '</h3>' +
+      '<div class="count">' + total + ' issue' + (total !== 1 ? 's' : '') + '</div>';
+    container.appendChild(div);
+  }
+}
+
+function buildDonutSvg(m, p, o) {
+  var total = m + p + o;
+  if (total === 0) return '<svg viewBox="0 0 100 100" width="100" height="100" style="display:block;margin:0 auto;"><circle cx="50" cy="50" r="35" fill="none" stroke="#d0d7de" stroke-width="15" opacity="0.5"/></svg>';
+  var r = 35, circ = 2 * Math.PI * r, offset = 0;
+  var svg = '<svg viewBox="0 0 100 100" width="100" height="100" style="display:block;margin:0 auto;transform:rotate(-90deg);">';
+  var segs = [{c:m,color:'var(--color-mandatory)'},{c:p,color:'var(--color-potential)'},{c:o,color:'var(--color-optional)'}];
+  for (var i = 0; i < segs.length; i++) {
+    if (segs[i].c === 0) continue;
+    var segLen = (segs[i].c / total) * circ;
+    var gap = total > segs[i].c ? 1.5 : 0;
+    var drawLen = Math.max(segLen - gap, 0.5);
+    svg += '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="' + segs[i].color + '" stroke-width="15" stroke-dasharray="' + drawLen.toFixed(2) + ' ' + circ.toFixed(2) + '" stroke-dashoffset="' + (-offset).toFixed(2) + '"/>';
+    offset += segLen;
+  }
+  svg += '</svg>';
+  return svg;
+}
+</script>
+</div></body></html>
